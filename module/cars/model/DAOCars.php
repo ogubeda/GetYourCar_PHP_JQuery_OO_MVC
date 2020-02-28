@@ -1,43 +1,37 @@
 <?php
 //////
 $path = $_SERVER['DOCUMENT_ROOT'] . '/frameworkCars.v.1.2/';
-include($path . "model/Connect.php");
+include($path . "model/DAOGeneral.php");
 class Querys {
     //////
     function select() {
         //////
-        $connection = Connect::enable();
-        
-        $selectSQL = "SELECT * FROM allCars;";
-        $res = mysqli_query($connection, $selectSQL);
+        $select = "SELECT * FROM allCars";
+        $res = DAOGeneral::query($select);
         $arrCarPlates = array();
         //////
-
         if (mysqli_num_rows($res) > 0) {
             while ($row = mysqli_fetch_assoc($res)) {
                 $arrCarPlates[] = $row;
             }// end_while
         }// end_if
         //////
-        Connect::close($connection);
         return $arrCarPlates;
     }// end_select
     //////
 
     function selectOne($carPlate) {
         //////
-        $connection = Connect::enable();
-        $selectSQL = 'SELECT * FROM allCars WHERE carPlate ="' . $carPlate . '"';
-        $res = mysqli_query($connection, $selectSQL);
+        $select = 'SELECT * FROM allCars WHERE carPlate ="' . $carPlate . '"';
+        $res = DAOGeneral::query($select);
         $car = array();
         //////
-
         if (mysqli_num_rows($res) > 0) {
             $car = mysqli_fetch_assoc($res);
         }// end_if
-        Connect::close($connection);
         return $car;
-    }
+    }// end_selectOne
+    //////
 
     function insert($car) {
         //////

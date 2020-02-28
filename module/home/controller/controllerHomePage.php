@@ -10,7 +10,7 @@ switch ($_GET['op']) {
         include ('module/home/view/homepage.html');
         break;
     case 'homePageSlide';
-        $selSlide = $homeQuery -> selectSlide();
+        $selSlide = $homeQuery -> selectMultiple("SELECT carPlate, brand, model, image FROM allCars ORDER BY cv DESC LIMIT 5");
         if (!empty($selSlide)) {
             echo json_encode($selSlide);
         }else {
@@ -18,7 +18,7 @@ switch ($_GET['op']) {
         }// end_else
         break;
     case 'homePageCat';
-        $selCatBrand = $homeQuery -> selectCatBrands();
+        $selCatBrand = $homeQuery -> selectMultiple("SELECT * FROM brandCars");
         if (!empty($selCatBrand)) {
             echo json_encode($selCatBrand);
         }else{

@@ -25,30 +25,25 @@ function loadSlider() {
                     '<i class="fa fa-angle-left"></i>',
                     '<i class="fa fa-angle-right"></i>'
                 ]
-            }).fail(function() {
-                window.location.href = "index.php?page=error503";
             });
-
-    });// end_done
+    }).fail(function() {
+        window.location.href = "index.php?page=error503";
+    });
     //////
 }// end_loadSlider
 //////
 
 function loadCatBrands() {
     //////
-    $.ajax({
-        url: 'module/home/controller/controllerHomePage.php?op=homePageCat',
-        type: 'GET',
-        dataType: 'JSON'
-    }).done(function(data) {
-        //////
+    ajaxPromise('module/home/controller/controllerHomePage.php?op=homePageCat', 'POST', 'JSON').then(function(data) {
         for (row in data) {
-            brand = data[row].brand.replace(/ /g, "_");
+            let brand = data[row].brand.replace(/ /g, "_");
             $('<div></div>').attr({'id': brand, 'class':'col-md-4 single-service-2'}).appendTo('#containerCategories');
             $('<div></div>').attr({'class':'inner'}).html('<img src = "' + data[row].image + '" style = "max-width: 100%; height: 100px;"><h4 style = "padding-top: 25px">' + data[row].brand + '</h4></img>').appendTo('#' + brand);
         }// end_for
-    }).fail(function() {
-        window.location.href = 'index.php?page=error503';
+    })
+    .catch(function() {
+        //window.location.href = 'index.php?page=error503';
     });
 }// end_loadCatBrands
 //////

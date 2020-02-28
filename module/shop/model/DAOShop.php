@@ -2,68 +2,44 @@
 //////
 $path = $_SERVER['DOCUMENT_ROOT'] . '/frameworkCars.v.1.2/';
 //////
-include ($path . 'model/Connect.php');
+include ($path . 'model/DAOGeneral.php');
 class QuerysShop {
     //////
-    function selectCars() {
+    function selectSingle($select) {
         //////
-        $connection = Connect::enable();
-        $select = 'SELECT carPlate, brand, model, image FROM allCars';
-        $returnArr = array();
+        $query = DAOGeneral::query($select);
+        $returnValue = "";
         //////
-        $query = mysqli_query($connection, $select);
         if (mysqli_num_rows($query) > 0) {
-            while ($row = mysqli_fetch_assoc($query)) {
-                $returnArr[] = $row;
-            }// end_while
-        }// end_if
-        Connect::close($connection);
-        //////
-        return $returnArr;
-    }// end_selectCars
-    //////
-
-    function selectAllCon() {
-        //////
-        $connection = Connect::enable();
-        $select = 'SELECT * FROM concessionaire';
-        $returnArr = array();
-        //////
-        $query = mysqli_query($connection, $select);
-        if (mysqli_num_rows($query) > 0) {
-            while ($row = mysqli_fetch_assoc($query)) {
-                $returnArr[] = $row;
-            }// end_while
+            $returnValue = mysqli_fetch_assoc($query);
         }// end_if
         //////
-        return $returnArr;
-    }// end_selectAllCon
-    //////
-
-    function selectOne($carPlate) {
-        //////
-        $connection = Connect::enable();
-        $select = 'SELECT * FROM allCars WHERE carPlate = "' . $carPlate . '"';
-        $car = array();
-        //////
-        $query = mysqli_query($connection, $select);
-        if (mysqli_num_rows($query) > 0) {
-            $car = mysqli_fetch_assoc($query);
-        }// end_if
-        Connect::close($connection);
-        //////
-        return $car;
+        return $returnValue;
     }// end_selectOne
+    //////
+
+    function selectMultiple($select) {
+        //////
+        $query = DAOGeneral::query($select);
+        $returnArr = array();
+        //////
+        if (mysqli_num_rows($query) > 0) {
+            while ($row = mysqli_fetch_assoc($query)) {
+                $returnArr[] = $row;
+            }// end_while
+        }// end_if
+        //////
+        return $returnArr;
+    }// end_selectMultiple
     //////
 
     function selectFilter() {
         //////
-        $connection = Connect::enable();
         $colsArr = array('brand', 'seats', 'doors', 'typeEngine', 'gearShift');
         $returnArrBrands = array();
         foreach ($colsArr as $row) {
             $select = 'SELECT DISTINCT ' . $row . ' FROM allCars ORDER BY ' . $row;
-            $query = mysqli_query($connection, $select);
+            $query = DAOGeneral::query($select);;
             if (mysqli_num_rows($query) > 0) {
                 while ($row_inner[] = mysqli_fetch_assoc($query)) {
                     $returnArrBrands[$row] = $row_inner;
@@ -71,22 +47,18 @@ class QuerysShop {
                 unset($row_inner);
             }// end_if
         }//end_foreach
-        Connect::close($connection);
         //////
         return $returnArrBrands;
-        //////
     }// end_selectFilter
     //////
-
-    function filterCars($filters) {
+    
+    function mountQuery($unmounted) {
         //////
-        $connection = Connect::enable();
-        $returnArr = array();
-        $select = 'SELECT carPlate, brand, model, image FROM allCars WHERE ';
         $i = 0;
         $cont2 = 0;
         $continue = "";
-        foreach ($filters as $key => $row) {
+        $select = 'SELECT carPlate, brand, model, image FROM allCars WHERE ';
+        foreach ($unmounted as $key => $row) {
             if ($i == 0) {
                 foreach ($row as $row_inner) {
                     if ($cont2 == 0) {
@@ -112,15 +84,7 @@ class QuerysShop {
             $cont2 = 0;
             $select = $select . $continue;
         }// end_foreach
-        $query = mysqli_query($connection, $select);
-        if (mysqli_num_rows($query) > 0) {
-            while ($row = mysqli_fetch_assoc($query)) {
-                $returnArr[] = $row;
-            }// end_while
-        }// end_if
         //////
-        Connect::close($connection);
-        //////
-        return $returnArr;
-    }// end_filterCars
+        return $select;
+    }// end_mountQuery
 }// end_QuerysShop

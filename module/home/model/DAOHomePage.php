@@ -1,15 +1,13 @@
 <?php
 //////
 $path = $_SERVER['DOCUMENT_ROOT'] . '/frameworkCars.v.1.2/';
-include ($path . "model/Connect.php");
+include ($path . "model/DAOGeneral.php");
 //////
 class QuerysHomePage {
     //////
-    function selectSlide() {
+    function selectMultiple($select) {
         //////
-        $connect = Connect::enable();
-        $select = "SELECT carPlate, brand, model, image FROM allCars ORDER BY cv DESC LIMIT 5";
-        $query = mysqli_query($connect, $select);
+        $query = DAOGeneral::query($select);
         $retrArray = array();
         //////
         if (mysqli_num_rows($query) > 0) {
@@ -18,25 +16,7 @@ class QuerysHomePage {
             }// end_while
         }// end_if
         //////
-        Connect::close($connect);
         return $retrArray;
-    }// end_selectSlide
+    }// end_selectMultiple
     //////
-
-    function selectCatBrands() {
-        //////
-        $connection = Connect::enable();
-        $select = "SELECT * FROM brandCars";
-        $query = mysqli_query($connection, $select);
-        $retrArray = array();
-        //////
-        if (mysqli_num_rows($query) > 0) {
-            while ($row = mysqli_fetch_assoc($query)) {
-                $retrArray[] = $row;
-            }// end_while
-        }// end_if
-        //////
-        Connect::close($connection);
-        return $retrArray;
-    }// end_selectRelevant
 }// end_QuerysHomePage

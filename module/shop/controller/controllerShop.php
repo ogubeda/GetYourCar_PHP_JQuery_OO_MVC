@@ -11,7 +11,7 @@ switch ($_GET['op']) {
         break;
         //////
     case 'sendInfo';
-        $selShop = $querys -> selectCars();
+        $selShop = $querys -> selectMultiple('SELECT carPlate, brand, model, image FROM allCars');
         if (!empty($selShop)) {
             echo json_encode($selShop);
         }else {
@@ -20,7 +20,7 @@ switch ($_GET['op']) {
         break;
         //////
     case 'read';
-        $selReadShop = $querys -> selectOne($_GET['carPlate']);
+        $selReadShop = $querys -> selectSingle('SELECT * FROM allCars WHERE carPlate ="'  . $_GET['carPlate'] . '"');
         //////
         if (!empty($selReadShop)) {
             echo json_encode($selReadShop);
@@ -39,7 +39,7 @@ switch ($_GET['op']) {
         break;
         //////
     case 'sendAllCon';
-        $selAllCon = $querys -> selectAllCon();
+        $selAllCon = $querys -> selectMultiple('SELECT * FROM concessionaire');
         if (!empty($selAllCon)) {
             echo json_encode($selAllCon);
         }else {
@@ -48,9 +48,11 @@ switch ($_GET['op']) {
         break;
         //////
     case 'filter';
-        $selCarFilter = $querys -> filterCars(json_decode($_GET['filters'], true));
-        if (!empty($selCarFilter)) {
-            echo json_encode($selCarFilter);
+        $selCarFilter = $querys -> mountQuery(json_decode($_GET['filters'], true));
+        //////
+        $selMulti = $querys -> selectMultiple($selCarFilter);
+        if (!empty($selMulti)) {
+            echo json_encode($selMulti);
         }else {
             echo "error";
         }// end_else

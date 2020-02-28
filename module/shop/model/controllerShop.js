@@ -25,7 +25,7 @@ function loadShop() {
         }// end_for
     }).fail(function() {
         localStorage.removeItem('filters');
-        window.location.href = 'index.php?page=error503';
+        //window.location.href = 'index.php?page=error503';
     });// end_ajax
 }// end_loadShop
 //////
@@ -51,7 +51,7 @@ function loadFilters() {
         highlightFilters();
         //////
     }).fail(function() {
-        window.location.href = "index.php?page=error503";
+        //window.location.href = "index.php?page=error503";
     });// end_ajax
 }// end_loadFilters
 //////
@@ -81,7 +81,7 @@ function loadGMaps() {
             });
         }// end_for
     }).fail(function() {
-        window.location.href = 'index.php?page=error503';
+        //window.location.href = 'index.php?page=error503';
     });// end_ajax
 }// end_loadGMaps
 //////
@@ -89,18 +89,18 @@ function loadGMaps() {
 function highlightFilters(remove) {
     //////
     if (localStorage.getItem('filters')) {
-        var filters = JSON.parse(localStorage.getItem('filters'));
+        let filters = JSON.parse(localStorage.getItem('filters'));
         for (row in filters) {
             //////
             for (row_inner in filters[row]) {
-                var content = '#' + filters[row][row_inner].replace(/ /g, "_") + '-filter-div';
+                let content = '#' + filters[row][row_inner].replace(/ /g, "_") + '-filter-div';
                 $(content).addClass('active-filter');
             }// end_for
         }// end_for
     }// end_if
     //////
     if (typeof remove !== 'undefined') {
-        var content = '#' + remove.replace(/ /g, "_") + '-filter-div';
+        let content = '#' + remove.replace(/ /g, "_") + '-filter-div';
         $(content).removeClass('active-filter');
     }
 }// end_highlightFilters
@@ -108,11 +108,7 @@ function highlightFilters(remove) {
 
 function showDetails() {
     //////
-    $.ajax({
-        url: 'module/shop/controller/controllerShop.php?op=read&carPlate=' + localStorage.getItem('carPlate'),
-        type: 'GET',
-        dataType: 'JSON'
-    }).done(function(data) {
+    ajaxPromise('module/shop/controller/controllerShop.php?op=read&carPlate=' + localStorage.getItem('carPlate'), 'GET', 'JSON').then(function(data) {
         $('.content').empty();
         $('<div></div>').attr({'class': 'top-details'}).appendTo('.content');
         $('<div><div>').attr({'class': 'top-photo'}).appendTo('.top-details');
@@ -130,10 +126,9 @@ function showDetails() {
         //////
         $('<div></div>').attr({'class': 'container-others'}).appendTo('#container-shop-details');
         $('.container-others').html('<h5>Roads: ' + data.roads + ' Extras: ' + data.extras + ' Start Date: ' + data.startDate + ' End Date: ' + data.endDate + '</h5>');
-        //////
-    }).fail(function() {
-        window.location.href = "index.php?page=error503";
-    }); // end_ajax
+    }).catch(function() {
+        //window.location.href = 'index.php?page=error503'
+    }); // end_ajaxPromise
     //////
 }// end_showModal
 //////
@@ -151,26 +146,29 @@ function redirectDetails() {
 function filter() {
     //////
     $(document).on('click', '#filter-btn', function() {
+        let filterKey = this.getAttribute('class');
+        let insFilter = this.getAttribute('name');
+        //////
         if (localStorage.getItem('filters')) {
             var pastFilters = JSON.parse(localStorage.getItem('filters'));
             var obj = Object.keys(pastFilters);
             //////
-            if (obj.includes(this.getAttribute('class'))) {
+            if (obj.includes(filterKey)) {
                 //////
-                if (pastFilters[this.getAttribute('class')].includes(this.getAttribute('name'))) {
-                    var arrPosition = pastFilters[this.getAttribute('class')].indexOf(this.getAttribute('name'));
-                    pastFilters[this.getAttribute('class')].splice(arrPosition, 1);
+                if (pastFilters[filterKey].includes(insFilter)) {
+                    var arrPosition = pastFilters[filterKey].indexOf(insFilter);
+                    pastFilters[filterKey].splice(arrPosition, 1);
                     //////
-                    highlightFilters(this.getAttribute('name'));
+                    highlightFilters(insFilter);
                     //////
-                    if ($(pastFilters[this.getAttribute('class')]).size() == 0) {
-                        delete pastFilters[this.getAttribute('class')];
+                    if ($(filterKey).size() == 0) {
+                        delete pastFilters[filterKey];
                     }// end_if
                 }else {
-                    pastFilters[this.getAttribute('class')].push(this.getAttribute('name'));
+                    pastFilters[filterKey].push(insFilter);
                 }// end_else
             }else {
-                pastFilters[this.getAttribute('class')] = [this.getAttribute('name')];
+                pastFilters[filterKey] = [insFilter];
             }// end_else
             //////
             if (Object.keys(pastFilters).length == 0) {
@@ -179,7 +177,7 @@ function filter() {
                 localStorage.setItem('filters', JSON.stringify(pastFilters))
             }// end_else
         }else {
-            var allFilters = {[this.getAttribute('class')] : [this.getAttribute('name')]};
+            var allFilters = {[filterKey] : [insFilter]};
             localStorage.setItem('filters', JSON.stringify(allFilters));
         }// end_else
         //////
