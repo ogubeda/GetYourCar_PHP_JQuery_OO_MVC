@@ -25,7 +25,7 @@ function loadShop() {
         }// end_for
     }).fail(function() {
         localStorage.removeItem('filters');
-        //window.location.href = 'index.php?page=error503';
+        location.reload();
     });// end_ajax
 }// end_loadShop
 //////
@@ -41,7 +41,8 @@ function loadFilters() {
         for (row in data) {
             $('<h4 class = "filter-title"></h4>').html(row.toUpperCase()).appendTo('.container-filter');
             for (row_inner in data[row]) {
-                $('<div></div>').attr({'class': 'filter-col', 'id': data[row][row_inner][row].replace(/ /g, "_") + "-filter-div"})
+                let keys = Object.keys(data[row][row_inner]);
+                $('<div></div>').attr({'class': 'filter-col', 'id': data[row][row_inner][row].replace(/ /g, "_") + keys + "-filter-div"})
                 .appendTo('.container-filter')
                 .html('<a style = "width: 100%" id="filter-btn" class = "' + row + '" name="' + data[row][row_inner][row]+ '">' + data[row][row_inner][row] + '</a>');
                 //////                
@@ -86,23 +87,19 @@ function loadGMaps() {
 }// end_loadGMaps
 //////
 
-function highlightFilters(remove) {
+function highlightFilters() {
     //////
+    $('.filter-col').removeClass('active-filter');
     if (localStorage.getItem('filters')) {
         let filters = JSON.parse(localStorage.getItem('filters'));
         for (row in filters) {
-            //////
             for (row_inner in filters[row]) {
-                let content = '#' + filters[row][row_inner].replace(/ /g, "_") + '-filter-div';
+                let content = '#' + filters[row][row_inner].replace(/ /g, "_") + row + '-filter-div';
                 $(content).addClass('active-filter');
             }// end_for
         }// end_for
     }// end_if
     //////
-    if (typeof remove !== 'undefined') {
-        let content = '#' + remove.replace(/ /g, "_") + '-filter-div';
-        $(content).removeClass('active-filter');
-    }
 }// end_highlightFilters
 //////
 
@@ -159,9 +156,8 @@ function filter() {
                     var arrPosition = pastFilters[filterKey].indexOf(insFilter);
                     pastFilters[filterKey].splice(arrPosition, 1);
                     //////
-                    highlightFilters(insFilter);
-                    //////
-                    if ($(filterKey).size() == 0) {
+                    if ($(pastFilters[filterKey]).size() == 0) {
+                        //console.log((pastFilters[filterKey]).size());
                         delete pastFilters[filterKey];
                     }// end_if
                 }else {
@@ -181,7 +177,6 @@ function filter() {
             localStorage.setItem('filters', JSON.stringify(allFilters));
         }// end_else
         //////
-        //location.reload();
         highlightFilters();
         loadShop();
     });
@@ -192,7 +187,7 @@ function removeFilters() {
     /////
     $(document).on('click', '#remove-filters', function() {
         localStorage.removeItem('filters');
-        $('.filter-col').removeClass('active-filter');
+        highlightFilters();
         loadShop();
     });
 }// end_removeFilters
