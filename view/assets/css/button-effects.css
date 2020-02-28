@@ -1,0 +1,43 @@
+.card-shop {
+    text-align: center;
+    margin: 15px 0;
+    -ms-flex: 0 0 33.333333%;
+    flex: 0 0 33.333333%;
+    max-width: 33.333333%;
+    position: relative;
+    width: 100%;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 15px;
+    
+}
+.card-shop .inner {
+    border: 1px solid #2d2a2e;
+    border-radius: 5px;
+    padding: 85px 40px;
+    background-color: #2d2a2e;
+    transition: 0.2s;
+}
+.card-shop .inner:hover {
+    cursor: pointer;
+    box-shadow: 2.5px 2.5px 2.5px #fc7820, 5px 5px 5px #fc7820;
+}
+
+.fadeInAnimation {
+    -webkit-animation: fadeInDown 1s;
+    -moz-animation: fadeInDown 1s;
+    -o-animation: fadeInDown 1s;
+    animation: fadeInDown 1s;
+}
+.fadeInLeftAnimation {
+    -webkit-animation: fadeInLeft 1s;
+    -moz-animation: fadeInLeft 1s;
+    -o-animation: fadeInLeft 1s;
+    animation: fadeInLeft 1s;
+}
+.slideInDownAnimation {
+    -webkit-animation: slideInDown 1s;
+    -moz-animation: slideInDown 1s;
+    -o-animation: slideInDown 1s;
+    animation: slideInDown 1s;
+}
