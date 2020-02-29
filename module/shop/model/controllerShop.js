@@ -32,12 +32,8 @@ function loadShop() {
 
 function loadFilters() {
     //////
-    $.ajax({
-        url: 'module/shop/controller/controllerShop.php?op=sendFilters',
-        type: 'GET',
-        dataType: 'JSON'
-    }).done(function(data) {
-        loadGMaps();
+    ajaxPromise('module/shop/controller/controllerShop.php?op=sendFilters', 'POST', 'JSON').then((data) => {
+        $('<button></button>').attr({'class': 'default-button', 'id': 'modal-map-btn'}).appendTo('.container-filter').html('Open Map');
         for (row in data) {
             $('<h4 class = "filter-title"></h4>').html(row.toUpperCase()).appendTo('.container-filter');
             for (row_inner in data[row]) {
@@ -48,14 +44,22 @@ function loadFilters() {
                 //////                
             }// end_for
         }// end_for
-        //////
-        highlightFilters();
-        //////
-    }).fail(function() {
-        //window.location.href = "index.php?page=error503";
-    });// end_ajax
+    }).catch(() => {
+        console.log('f');
+    }); // end_ajaxPromise
 }// end_loadFilters
 //////
+
+function loadMapModal() {
+    //////
+    $('<div></div>').attr({'id': 'container-map', 'style': 'margin: 5px 5px'}).prependTo('#modalGMaps').hide();
+    $('<div></div>').attr({'id': 'map', 'style': 'width: auto; height: 500px'}).appendTo('#container-map');
+    $('<div></div>').attr({'id': 'container-shop-gmaps'}).appendTo('#container-map');
+    //////
+    $(document).on('click', '#modal-map-btn', () => {
+        loadGMaps();
+    });// end_click
+}// end_loadMapModal
 
 function loadGMaps() {
     //////
@@ -64,23 +68,53 @@ function loadGMaps() {
         type: 'POST',
         dataType: 'JSON'
     }).done(function(data) {
-        $('<div></div>').attr({'id': 'container-map', 'style': 'margin: 5px 5px'}).prependTo('.container-filter');
-        $('<div></div>').attr({'id': 'map', 'style': 'width: auto; height: 200px'}).appendTo('#container-map');
         //////
-        var center = {lat: 39.9203365, lng: -3.511509};
-        var map = new google.maps.Map(document.getElementById('map'),{
-                    zoom: 4,
+        const center = {lat: 39.9203365, lng: -3.511509};
+        const map = new google.maps.Map(document.getElementById('map'),{
+                    zoom: 6,
                     center: center});
         //////
         for (row in data) {
-            var split = data[row].locationCon.split(",");
-            var location = {lat: parseFloat(split[0]), lng: parseFloat(split[1])}
-            var marker = new google.maps.Marker({
+            let idCon = data[row].idCon;
+            let split = data[row].locationCon.split(",");
+            let location = {lat: parseFloat(split[0]), lng: parseFloat(split[1])}
+            //////
+            const marker = new google.maps.Marker({
                 position: location,
                 map: map,
                 title: data[row].nameCon
             });
+            //////
+            const infoWindow = new google.maps.InfoWindow({
+                content: data[row].nameCon
+            });
+            //////
+            marker.addListener('click', () => {
+                let filterValue = {'idCon' : [idCon]};
+                localStorage.setItem('filters', JSON.stringify(filterValue));
+                $('#container-map').dialog('close');
+                loadShop();
+            });
+            marker.addListener('mouseover', () => {
+                infoWindow.open(marker.get('map'), marker);
+            });
+            //////
+            marker.addListener('mouseout', () => {
+                infoWindow.close(marker.get('map'), marker);
+            });
         }// end_for
+        //////
+        $("#container-map").show();
+        $("#container-map").dialog({
+            width : 850,
+            height: 600,
+            resizable: "false",
+            modal: "true",
+            hide: "fold",
+            show: "fold",
+            buttons : {
+            }// end_Buttons
+        }); // end_Dialog
     }).fail(function() {
         //window.location.href = 'index.php?page=error503';
     });// end_ajax
@@ -91,7 +125,7 @@ function highlightFilters() {
     //////
     $('.filter-col').removeClass('active-filter');
     if (localStorage.getItem('filters')) {
-        let filters = JSON.parse(localStorage.getItem('filters'));
+        const filters = JSON.parse(localStorage.getItem('filters'));
         for (row in filters) {
             for (row_inner in filters[row]) {
                 let content = '#' + filters[row][row_inner].replace(/ /g, "_") + row + '-filter-div';
@@ -200,6 +234,7 @@ function loadContent(){
     }else { 
         loadFilters();
         loadShop();
+        loadMapModal();
         filter();
         redirectDetails();
         removeFilters();
