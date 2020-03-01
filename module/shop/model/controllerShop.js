@@ -33,7 +33,7 @@ function loadShop() {
 function loadFilters() {
     //////
     ajaxPromise('module/shop/controller/controllerShop.php?op=sendFilters', 'POST', 'JSON').then((data) => {
-        $('<button></button>').attr({'class': 'default-button', 'id': 'modal-map-btn'}).appendTo('.container-filter').html('Open Map');
+        $('<button></button>').attr({'class': 'default-button', 'id': 'modal-map-btn', 'style': 'margin-left: 15%; margin-bottom: 10px'}).appendTo('.container-filter').html('Open Map');
         for (row in data) {
             $('<h4 class = "filter-title"></h4>').html(row.toUpperCase()).appendTo('.container-filter');
             for (row_inner in data[row]) {
@@ -44,9 +44,14 @@ function loadFilters() {
                 //////                
             }// end_for
         }// end_for
+        $(document).on('click', '#filter-btn', function() {
+            filter(this.getAttribute('class'), this.getAttribute('name'));
+        });
+        //////
     }).catch(() => {
         console.log('f');
     }); // end_ajaxPromise
+    
 }// end_loadFilters
 //////
 
@@ -90,10 +95,8 @@ function loadGMaps() {
             });
             //////
             marker.addListener('click', () => {
-                let filterValue = {'idCon' : [idCon]};
-                localStorage.setItem('filters', JSON.stringify(filterValue));
+                filter('idCon', idCon);
                 $('#container-map').dialog('close');
-                loadShop();
             });
             marker.addListener('mouseover', () => {
                 infoWindow.open(marker.get('map'), marker);
@@ -174,46 +177,44 @@ function redirectDetails() {
 }// end_redirectDetails
 //////
 
-function filter() {
+function filter(key, value) {
     //////
-    $(document).on('click', '#filter-btn', function() {
-        let filterKey = this.getAttribute('class');
-        let insFilter = this.getAttribute('name');
+    let filterKey = key;
+    let insFilter = value;
+    //////
+    if (localStorage.getItem('filters')) {
+        var pastFilters = JSON.parse(localStorage.getItem('filters'));
+        var obj = Object.keys(pastFilters);
         //////
-        if (localStorage.getItem('filters')) {
-            var pastFilters = JSON.parse(localStorage.getItem('filters'));
-            var obj = Object.keys(pastFilters);
+        if (obj.includes(filterKey)) {
             //////
-            if (obj.includes(filterKey)) {
+            if (pastFilters[filterKey].includes(insFilter)) {
+                var arrPosition = pastFilters[filterKey].indexOf(insFilter);
+                pastFilters[filterKey].splice(arrPosition, 1);
                 //////
-                if (pastFilters[filterKey].includes(insFilter)) {
-                    var arrPosition = pastFilters[filterKey].indexOf(insFilter);
-                    pastFilters[filterKey].splice(arrPosition, 1);
-                    //////
-                    if ($(pastFilters[filterKey]).size() == 0) {
-                        //console.log((pastFilters[filterKey]).size());
-                        delete pastFilters[filterKey];
-                    }// end_if
-                }else {
-                    pastFilters[filterKey].push(insFilter);
-                }// end_else
+                if ($(pastFilters[filterKey]).size() == 0) {
+                    //console.log((pastFilters[filterKey]).size());
+                    delete pastFilters[filterKey];
+                }// end_if
             }else {
-                pastFilters[filterKey] = [insFilter];
-            }// end_else
-            //////
-            if (Object.keys(pastFilters).length == 0) {
-                localStorage.removeItem('filters');
-            }else {
-                localStorage.setItem('filters', JSON.stringify(pastFilters))
+                pastFilters[filterKey].push(insFilter);
             }// end_else
         }else {
-            var allFilters = {[filterKey] : [insFilter]};
-            localStorage.setItem('filters', JSON.stringify(allFilters));
+            pastFilters[filterKey] = [insFilter];
         }// end_else
         //////
-        highlightFilters();
-        loadShop();
-    });
+        if (Object.keys(pastFilters).length == 0) {
+            localStorage.removeItem('filters');
+        }else {
+            localStorage.setItem('filters', JSON.stringify(pastFilters))
+        }// end_else
+    }else {
+        var allFilters = {[filterKey] : [insFilter]};
+        localStorage.setItem('filters', JSON.stringify(allFilters));
+    }// end_else
+    //////
+    highlightFilters();
+    loadShop();
 }// end_filter
 //////
 
@@ -231,11 +232,10 @@ function loadContent(){
     //////
     if (localStorage.getItem('currentPage') == 'shop-details') {
         showDetails();
-    }else { 
+    }else {
         loadFilters();
         loadShop();
         loadMapModal();
-        filter();
         redirectDetails();
         removeFilters();
     }// end_else
