@@ -103,7 +103,6 @@ function loadGMaps() {
             //////
             marker.addListener('click', () => {
                 filter('idCon', idCon, true);
-                //$('#container-map').dialog('close');
             });
             marker.addListener('mouseover', () => {
                 infoWindow.open(marker.get('map'), marker);
