@@ -19,9 +19,7 @@
         <span class="preloader-spin"></span>
     </div>
     <div class="site">
-        <header>
-            <?php include("view/inc/menu.html"); ?>
-        </header>        
+        <?php include("view/inc/menu.html"); ?>
     </div>
     <div class = "content">
         <?php include ("view/inc/pages.php");?>
