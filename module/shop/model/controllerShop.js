@@ -1,4 +1,4 @@
-function loadShop() {
+function loadShop(modal = false) {
     //////
     var filters = localStorage.getItem('filters') || false;
     //////
@@ -18,10 +18,16 @@ function loadShop() {
         dataType: 'JSON'
     }).done(function(data) {
         $('.container-shop').empty();
+        $('#container-shop-gmaps').empty();
         for (row in data) {
             brand = data[row].brand.replace(/ /g, "_");
-            $('<div></div>').attr({'id': data[row].carPlate, 'class':'card-shop fadeInAnimation'}).appendTo('.container-shop');
+            $('<div></div>').attr({'id': data[row].carPlate, 'class':'card-shop show-details-btn fadeInAnimation', 'name': data[row].carPlate}).appendTo('.container-shop');
             $('<div></div>').attr({'class':'inner'}).html('<h4 style = "padding-top: 25px">' + data[row].brand + " " + data[row].model + '</h4>').appendTo('#' + data[row].carPlate);
+            //////
+            if (modal == true) {
+                $('<div></div>').attr({'name': data[row].carPlate, 'id': data[row].carPlate + '-modal', 'class':'card-shop-modal  show-details-btn fadeInAnimation'}).appendTo('#container-shop-gmaps');
+                $('<div></div>').attr({'class':'inner'}).html('<h4 style = "padding-top: 25px">' + data[row].brand + " " + data[row].model + '</h4>').appendTo('#' + data[row].carPlate + '-modal');
+            }// end_if
         }// end_for
     }).fail(function() {
         localStorage.removeItem('filters');
@@ -57,12 +63,13 @@ function loadFilters() {
 
 function loadMapModal() {
     //////
-    $('<div></div>').attr({'id': 'container-map', 'style': 'margin: 5px 5px'}).prependTo('#modalGMaps').hide();
-    $('<div></div>').attr({'id': 'map', 'style': 'width: auto; height: 500px'}).appendTo('#container-map');
-    $('<div></div>').attr({'id': 'container-shop-gmaps'}).appendTo('#container-map');
+    $('<div></div>').attr({'id': 'container-map', 'style': 'margin: 5px 5px;'}).prependTo('#modalGMaps').hide();
+    $('<div></div>').attr({'id': 'map', 'style': 'width: 40%; height: 400px; float: left'}).appendTo('#container-map');
+    $('<div></div>').attr({'id': 'container-shop-gmaps', 'class': 'row', 'style': 'float:left; overflow-y: scroll; height: 450px'}).appendTo('#container-map');
     //////
     $(document).on('click', '#modal-map-btn', () => {
         loadGMaps();
+        loadShop(true)
     });// end_click
 }// end_loadMapModal
 
@@ -76,7 +83,7 @@ function loadGMaps() {
         //////
         const center = {lat: 39.9203365, lng: -3.511509};
         const map = new google.maps.Map(document.getElementById('map'),{
-                    zoom: 6,
+                    zoom: 5.7,
                     center: center});
         //////
         for (row in data) {
@@ -95,8 +102,8 @@ function loadGMaps() {
             });
             //////
             marker.addListener('click', () => {
-                filter('idCon', idCon);
-                $('#container-map').dialog('close');
+                filter('idCon', idCon, true);
+                //$('#container-map').dialog('close');
             });
             marker.addListener('mouseover', () => {
                 infoWindow.open(marker.get('map'), marker);
@@ -109,17 +116,20 @@ function loadGMaps() {
         //////
         $("#container-map").show();
         $("#container-map").dialog({
-            width : 850,
-            height: 600,
+            title: 'Maps',
+            width : 1150,
+            height: 550,
             resizable: "false",
+            dialogClass: 'container-dialog',
             modal: "true",
             hide: "fold",
             show: "fold",
             buttons : {
             }// end_Buttons
         }); // end_Dialog
+        $('#container-map').parent().removeClass('ui-widget-content');
     }).fail(function() {
-        //window.location.href = 'index.php?page=error503';
+        window.location.href = 'index.php?page=error503';
     });// end_ajax
 }// end_loadGMaps
 //////
@@ -161,7 +171,7 @@ function showDetails() {
         $('<div></div>').attr({'class': 'container-others'}).appendTo('#container-shop-details');
         $('.container-others').html('<h5>Roads: ' + data.roads + ' Extras: ' + data.extras + ' Start Date: ' + data.startDate + ' End Date: ' + data.endDate + '</h5>');
     }).catch(function() {
-        //window.location.href = 'index.php?page=error503'
+        window.location.href = 'index.php?page=error503'
     }); // end_ajaxPromise
     //////
 }// end_showModal
@@ -169,15 +179,16 @@ function showDetails() {
 
 function redirectDetails() {
     //////
-    $(document).on("click", ".card-shop", function(){
+    $(document).on("click", ".show-details-btn" ,function(){
+        console.log(this.getAttribute('name'));
         localStorage.setItem('currentPage', 'shop-details');
-        localStorage.setItem('carPlate', this.getAttribute('id'))
+        localStorage.setItem('carPlate', this.getAttribute('name'))
         location.reload();
     });
 }// end_redirectDetails
 //////
 
-function filter(key, value) {
+function filter(key, value, modal = false) {
     //////
     let filterKey = key;
     let insFilter = value;
@@ -214,7 +225,7 @@ function filter(key, value) {
     }// end_else
     //////
     highlightFilters();
-    loadShop();
+    loadShop(modal);
 }// end_filter
 //////
 

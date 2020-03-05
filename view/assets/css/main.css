@@ -1407,3 +1407,6 @@ footer {
 .active-filter {
   background-color: #fc7820;
 }
+.ui-dialog.container-dialog {
+  background-color: #19181a;
+}

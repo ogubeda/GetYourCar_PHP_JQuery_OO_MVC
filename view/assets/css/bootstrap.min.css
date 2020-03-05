@@ -7944,3 +7944,11 @@ a.text-dark:focus, a.text-dark:hover {
         max-width: 940px
     }
 }
+#container-shop-gmaps{
+    /* transition: all 0.25s cubic-bezier(0.84, 0.35, 0.39, 0.74) 0s; */
+    margin-right: auto;
+    margin-left: auto;
+    padding-right: 15px;
+    padding-left: 15px;
+    width: 60%
+}
