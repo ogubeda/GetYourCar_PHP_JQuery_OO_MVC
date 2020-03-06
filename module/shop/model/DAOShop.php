@@ -5,6 +5,18 @@ $path = $_SERVER['DOCUMENT_ROOT'] . '/frameworkCars.v.1.2/';
 include ($path . 'model/DAOGeneral.php');
 class QuerysShop {
     //////
+    function selectBoolean($select) {
+        //////
+        $query = DAOGeneral::query($select);
+        //////
+        if ($query) {
+            return true;
+        }else {
+            return false;
+        }// end_else
+    }// end_selectBoolean
+    //////
+
     function selectSingle($select) {
         //////
         $query = DAOGeneral::query($select);

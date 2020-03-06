@@ -51,7 +51,7 @@ function loadCatBrands() {
 function loadDivs() {
     //////
     //////
-    $('<h1></h1>').html('Our Brands').appendTo('#homePage').attr("style", "padding-bottom: 50px");
+    $('<h1></h1>').html('Our Most Visited Brands').appendTo('#homePage').attr("style", "padding-bottom: 50px");
     $('<div></div>').attr({'id': "containerCategories", 'class':'row'}).appendTo('#homePage');
     //////
     loadSlider();
@@ -64,10 +64,20 @@ function redirectShop() {
     $(document).on('click', '.single-service-2', function() {
         var brand = this.getAttribute('id').replace("_", " ");
         //////
-        var filter = {'brand': [brand]};
-        localStorage.setItem('filters', JSON.stringify(filter));
-        localStorage.setItem('currentPage', 'shop');
-        window.location.href = "index.php?page=shop&op=list";
+        $.ajax({
+            url: 'module/home/controller/controllerHomePage.php?op=incrementView',
+            type: 'POST',
+            data: {brand: brand}
+        }).done(function(data) {
+            if (data == 1) {
+                var filter = {'brand': [brand]};
+                localStorage.setItem('filters', JSON.stringify(filter));
+                localStorage.setItem('currentPage', 'shop');
+                window.location.href = "index.php?page=shop&op=list";
+            }else {
+                console.log('Error when trying to find the brand.');
+            }// end_else
+        }); // end_done 
     });
     //////
     $(document).on('click', '.single-slide', function() {

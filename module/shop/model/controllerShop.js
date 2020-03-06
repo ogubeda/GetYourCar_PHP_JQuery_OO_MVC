@@ -152,6 +152,16 @@ function highlightFilters() {
 function showDetails() {
     //////
     ajaxPromise('module/shop/controller/controllerShop.php?op=read&carPlate=' + localStorage.getItem('carPlate'), 'GET', 'JSON').then(function(data) {
+        $.ajax({
+            url: 'module/shop/controller/controllerShop.php?op=viewUp',
+            type: 'POST',
+            data: {carPlate: data.carPlate}
+        }).done(function() {
+            console.log('Views updated.');
+        }).fail(function() {
+            console.log('Error when trying to update views.');
+        });// end_fail
+        //////
         $('.content').empty();
         $('<div></div>').attr({'class': 'top-details'}).appendTo('.content');
         $('<div><div>').attr({'class': 'top-photo'}).appendTo('.top-details');

@@ -18,13 +18,19 @@ switch ($_GET['op']) {
         }// end_else
         break;
     case 'homePageCat';
-        $selCatBrand = $homeQuery -> selectMultiple("SELECT * FROM brandCars");
+        $selCatBrand = $homeQuery -> selectMultiple("SELECT * FROM brandCars ORDER BY views DESC");
         if (!empty($selCatBrand)) {
             echo json_encode($selCatBrand);
         }else{
             echo "error";
         }// end_else
         break;
+    case 'incrementView';
+        $viewUp = $homeQuery -> selectBoolean('UPDATE brandCars SET views = views + 1 WHERE brand ="' . $_POST['brand'] . '"');
+        //////
+        echo $viewUp;
+        break;
+        //////
     default;
         include ('view/inc/error404.html');
         break;

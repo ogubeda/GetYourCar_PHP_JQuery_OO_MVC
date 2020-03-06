@@ -48,9 +48,9 @@ class Querys {
             $extras = "No";
         }// end_else
 
-        $insertSQL = "INSERT INTO allCars (carPlate, idCon, brand, model, seats, doors, gearShift, typeEngine, cv, maxSpeed, roads, extras, startDate, endDate)
+        $insertSQL = "INSERT INTO allCars (carPlate, idCon, brand, model, seats, doors, gearShift, typeEngine, cv, maxSpeed, roads, extras, startDate, endDate, views)
             VALUES ('$car[carPlate]', '$car[idCon]','$car[brand]', '$car[model]', '$car[seats]', '$car[doors]', '$car[gearShift]', 
-            '$car[typeEngine]','$car[powerCV]', '$car[maxSpeed]', '$roads', '$extras', '$car[startDate]', '$car[endDate]');";
+            '$car[typeEngine]','$car[powerCV]', '$car[maxSpeed]', '$roads', '$extras', '$car[startDate]', '$car[endDate]', 0);";
         if (mysqli_query($connection, $insertSQL)) {
             $done = true;
         }else {

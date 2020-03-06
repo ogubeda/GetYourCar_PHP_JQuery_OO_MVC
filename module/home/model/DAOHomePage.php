@@ -19,4 +19,14 @@ class QuerysHomePage {
         return $retrArray;
     }// end_selectMultiple
     //////
+    function selectBoolean($select) {
+        //////
+        $query = DAOGeneral::query($select);
+        //////
+        if ($query) {
+            return true;
+        }else {
+            return false;
+        }// end_if
+    }// end_selectBoolean
 }// end_QuerysHomePage
