@@ -18,7 +18,7 @@ switch ($_GET['op']) {
         }// end_else
         break;
     case 'homePageCat';
-        $selCatBrand = $homeQuery -> selectMultiple("SELECT * FROM brandCars ORDER BY views DESC");
+        $selCatBrand = $homeQuery -> selectMultiple("SELECT * FROM brandCars ORDER BY views DESC LIMIT " . $_POST['loaded'] . ", " . $_POST['items']);
         if (!empty($selCatBrand)) {
             echo json_encode($selCatBrand);
         }else{

@@ -33,20 +33,36 @@ function loadSlider() {
 }// end_loadSlider
 //////
 
-function loadCatBrands() {
+function loadCatBrands(loadeds = 0) {
     //////
-    ajaxPromise('module/home/controller/controllerHomePage.php?op=homePageCat', 'POST', 'JSON').then(function(data) {
+    let items = 3;
+    let loaded = loadeds;
+    //////
+    ajaxPromise('module/home/controller/controllerHomePage.php?op=homePageCat', 'POST', 'JSON', {items: items, loaded: loaded}).then(function(data) {
         for (row in data) {
             let brand = data[row].brand.replace(/ /g, "_");
             $('<div></div>').attr({'id': brand, 'class':'col-md-4 single-service-2'}).appendTo('#containerCategories');
             $('<div></div>').attr({'class':'inner'}).html('<img src = "' + data[row].image + '" style = "max-width: 100%; height: 100px;"><h4 style = "padding-top: 25px">' + data[row].brand + '</h4></img>').appendTo('#' + brand);
         }// end_for
-    })
-    .catch(function() {
+        //////
+    }).catch(function() {
         //window.location.href = 'index.php?page=error503';
     });
 }// end_loadCatBrands
 //////
+
+function detectScrollBrands() {
+    //////
+    //////
+    $(document).on('scroll', function() {
+        let position = $(window).scrollTop();
+        let bottom = $(document).height() - $(window).height();
+            if (position == bottom) {
+                loadCatBrands($('.col-md-4').length);
+            }// end_if
+    });
+}// end_detectScrollBrands
+///////
 
 function loadDivs() {
     //////
@@ -56,6 +72,7 @@ function loadDivs() {
     //////
     loadSlider();
     loadCatBrands();
+    detectScrollBrands();
 }// end_loadDivs
 //////
 
