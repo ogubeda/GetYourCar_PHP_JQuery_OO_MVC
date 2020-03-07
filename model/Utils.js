@@ -22,8 +22,8 @@ function ajaxPromise(sUrl, sType, sTData, sData = undefined) {
             data: sData
         }).done((data) => {
             resolve(data);
-        }).fail(() => {
-            reject(Error('F'));
+        }).fail((jqXHR, textStatus, errorThrow) => {
+            reject(errorThrow);
         }); // end_ajax
     });
 }

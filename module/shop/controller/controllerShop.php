@@ -11,7 +11,7 @@ switch ($_GET['op']) {
         break;
         //////
     case 'sendInfo';
-        $selShop = $querys -> selectMultiple('SELECT carPlate, brand, model, image FROM allCars ORDER BY views DESC');
+        $selShop = $querys -> selectMultiple('SELECT carPlate, brand, model, image FROM allCars ORDER BY views DESC LIMIT ' . $_POST['totalItems'] . ', ' . $_POST['itemsPage']);
         if (!empty($selShop)) {
             echo json_encode($selShop);
         }else {
@@ -62,6 +62,16 @@ switch ($_GET['op']) {
         $viewUp = $querys -> selectBoolean('UPDATE allCars SET views = views + 1 WHERE carPlate = "' . $_POST['carPlate'] . '"');
         //////
         echo $viewUp;
+        break;
+        //////
+    case 'countProd';
+        $countProd = $querys -> selectSingle('SELECT count(*) prods FROM allCars');
+        //////
+        if (!empty($countProd)) {
+            echo json_encode($countProd);
+        }else {
+            echo 'error';
+        }// end_else
         break;
         //////
     default;

@@ -1,4 +1,4 @@
-function loadShop(modal = false) {
+function loadShop(modal = false, itemsPage = 12, totalItems = 0) {
     //////
     var filters = localStorage.getItem('filters') || false;
     //////
@@ -14,8 +14,9 @@ function loadShop(modal = false) {
     //////
     $.ajax({
         url: url,
-        type: 'GET',
-        dataType: 'JSON'
+        type: 'POST',
+        dataType: 'JSON',
+        data: {itemsPage: itemsPage, totalItems: totalItems}
     }).done(function(data) {
         $('.container-shop').empty();
         $('#container-shop-gmaps').empty();
@@ -30,8 +31,8 @@ function loadShop(modal = false) {
             }// end_if
         }// end_for
     }).fail(function() {
-        localStorage.removeItem('filters');
-        location.reload();
+        //localStorage.removeItem('filters');
+        //location.reload();
     });// end_ajax
 }// end_loadShop
 //////
@@ -238,6 +239,34 @@ function filter(key, value, modal = false) {
 }// end_filter
 //////
 
+function loadPagination() {
+    //////
+    $.ajax({
+        url: 'module/shop/controller/controllerShop.php?op=countProd',
+        dataType: 'JSON',
+        type: 'POST'
+    }).done(function(data) {
+        let totalItems = 0;
+        let totalPages = 0;
+        //////
+        for (let i = 0; i < data.prods; i++) {
+            if ((i / 12) == 0) {
+                totalPages = totalPages + 1;
+            }// end_if
+        }// end_for
+        $('#pagination-shop').bootpag({
+            total: totalPages + 1,
+            page: 1,
+            maxVisible: totalPages + 1,
+        }).on("page", function(event, num) {
+            totalItems = 12 * (num - 1)
+            loadShop(false, 12, totalItems);
+        });
+    }).fail(function() {
+        console.log('F');
+    }); // end_fail
+}// end_loadPagination
+
 function removeFilters() {
     /////
     $(document).on('click', '#remove-filters', function() {
@@ -254,6 +283,7 @@ function loadContent(){
         showDetails();
     }else {
         loadFilters();
+        loadPagination();
         loadShop();
         loadMapModal();
         redirectDetails();
