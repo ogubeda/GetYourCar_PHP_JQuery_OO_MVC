@@ -30,6 +30,14 @@ function loadShop(modal = false, itemsPage = 12, totalItems = 0) {
                 $('<div></div>').attr({'class':'inner'}).html('<h4 style = "padding-top: 25px">' + data[row].brand + " " + data[row].model + '</h4>').appendTo('#' + data[row].carPlate + '-modal');
             }// end_if
         }// end_for
+        //////
+        console.log($('.container-filter').height());
+        console.log($('.container-shop').height())
+        if ($('.container-shop').height() > $('.container-filter').height()) {
+            $('#main-shop').css({'height' : ($('.container-shop').height() + 65)})
+        }else {
+            $('#main-shop').css({'height': ($('.container-filter').height() + 100)})
+        }
     }).fail(function() {
         //localStorage.removeItem('filters');
         //location.reload();
@@ -51,6 +59,8 @@ function loadFilters() {
                 //////                
             }// end_for
         }// end_for
+        highlightFilters();
+        loadShop();
         $(document).on('click', '#filter-btn', function() {
             filter(this.getAttribute('class'), this.getAttribute('name'));
         });
@@ -58,7 +68,6 @@ function loadFilters() {
     }).catch(() => {
         console.log('f');
     }); // end_ajaxPromise
-    
 }// end_loadFilters
 //////
 
@@ -250,7 +259,7 @@ function loadPagination() {
         let totalPages = 0;
         //////
         for (let i = 0; i < data.prods; i++) {
-            if ((i / 12) == 0) {
+            if ((i / 12) == 1) {
                 totalPages = totalPages + 1;
             }// end_if
         }// end_for
@@ -263,7 +272,7 @@ function loadPagination() {
             loadShop(false, 12, totalItems);
         });
     }).fail(function() {
-        console.log('F');
+        console.log('Fail when trying to get the products.');
     }); // end_fail
 }// end_loadPagination
 
@@ -284,7 +293,6 @@ function loadContent(){
     }else {
         loadFilters();
         loadPagination();
-        loadShop();
         loadMapModal();
         redirectDetails();
         removeFilters();
