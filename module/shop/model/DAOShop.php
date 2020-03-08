@@ -69,7 +69,7 @@ class QuerysShop {
         $i = 0;
         $cont2 = 0;
         $continue = "";
-        $select = 'SELECT carPlate, brand, model, image FROM allCars WHERE ';
+        $select = ' WHERE ';
         foreach ($unmounted as $key => $row) {
             if ($i == 0) {
                 foreach ($row as $row_inner) {

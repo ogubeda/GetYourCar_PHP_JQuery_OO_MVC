@@ -50,7 +50,7 @@ switch ($_GET['op']) {
     case 'filter';
         $selCarFilter = $querys -> mountQuery(json_decode($_GET['filters'], true));
         //////
-        $selMulti = $querys -> selectMultiple($selCarFilter);
+        $selMulti = $querys -> selectMultiple('SELECT carPlate, brand, model, image FROM allCars' . $selCarFilter . ' ORDER BY views DESC LIMIT ' . $_POST['totalItems'] . ', ' . $_POST['itemsPage']);
         if (!empty($selMulti)) {
             echo json_encode($selMulti);
         }else {
@@ -65,7 +65,15 @@ switch ($_GET['op']) {
         break;
         //////
     case 'countProd';
-        $countProd = $querys -> selectSingle('SELECT count(*) prods FROM allCars');
+        //////
+        $select = 'SELECT count(*) prods FROM allCars';
+        //////
+        if ($_GET['filters']) {
+            $mountQuery = $querys -> mountQuery(json_decode($_GET['filters'], true));
+            $select = $select . $mountQuery;
+        }// end_if
+        //////
+        $countProd = $querys -> selectSingle($select);
         //////
         if (!empty($countProd)) {
             echo json_encode($countProd);

@@ -74,8 +74,15 @@ function autoComplete() {
 function btnSearch() {
     //////
     $('#search-btn').on('click', function() {
-        const obj = {'idCon': [$('#drop-con').val()], 'brand': [$('#autocom').val()]};
-        localStorage.setItem('filters', JSON.stringify(obj));
+        let objVar = {};
+        //////
+        if ($('#drop-con').val() == 0) {
+            objVar = {'brand': [$('#autocom').val()]};
+        }else {
+            objVar = {'idCon': [$('#drop-con').val()], 'brand': [$('#autocom').val()]};
+        }// end_else
+        //////
+        localStorage.setItem('filters', JSON.stringify(objVar));
         //////
         window.location.href = 'index.php?page=shop&op=list';
     });// end_search-btn

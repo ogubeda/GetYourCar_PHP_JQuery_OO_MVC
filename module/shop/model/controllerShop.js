@@ -31,16 +31,14 @@ function loadShop(modal = false, itemsPage = 12, totalItems = 0) {
             }// end_if
         }// end_for
         //////
-        console.log($('.container-filter').height());
-        console.log($('.container-shop').height())
         if ($('.container-shop').height() > $('.container-filter').height()) {
             $('#main-shop').css({'height' : ($('.container-shop').height() + 65)})
         }else {
             $('#main-shop').css({'height': ($('.container-filter').height() + 100)})
         }
     }).fail(function() {
-        //localStorage.removeItem('filters');
-        //location.reload();
+        localStorage.removeItem('filters');
+        location.reload();
     });// end_ajax
 }// end_loadShop
 //////
@@ -245,15 +243,22 @@ function filter(key, value, modal = false) {
     //////
     highlightFilters();
     loadShop(modal);
+    loadPagination(localStorage.getItem('filters'));
 }// end_filter
 //////
 
-function loadPagination() {
+function loadPagination(data = null) {
+    //////
+    let url = 'module/shop/controller/controllerShop.php?op=countProd';
+    //////
+    if (data != null) {
+        url = 'module/shop/controller/controllerShop.php?op=countProd&filters=' + data;
+    }// end_if
     //////
     $.ajax({
-        url: 'module/shop/controller/controllerShop.php?op=countProd',
+        url: url,
         dataType: 'JSON',
-        type: 'POST'
+        type: 'POST',
     }).done(function(data) {
         let totalItems = 0;
         let totalPages = 0;
@@ -267,9 +272,12 @@ function loadPagination() {
             total: totalPages + 1,
             page: 1,
             maxVisible: totalPages + 1,
+            prev: 'Prev',
+            next: 'Next'
         }).on("page", function(event, num) {
             totalItems = 12 * (num - 1)
             loadShop(false, 12, totalItems);
+            $('html, body').animate({scrollTop: '0'}, 500);
         });
     }).fail(function() {
         console.log('Fail when trying to get the products.');
@@ -282,6 +290,7 @@ function removeFilters() {
         localStorage.removeItem('filters');
         highlightFilters();
         loadShop();
+        loadPagination();
     });
 }// end_removeFilters
 //////
