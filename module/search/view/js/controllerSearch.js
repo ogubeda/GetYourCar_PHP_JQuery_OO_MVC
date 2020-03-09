@@ -54,6 +54,9 @@ function autoComplete() {
         if ($('#drop-con').val() != 0) {
             sData.dropCon = $('#drop-con').val();
         }// end_id
+        if (($('#drop-province').val() != 0) && ($('#drop-con').val() == 0)) {
+            sData.province = $('#drop-province').val();
+        }// end_if
         //////
         $.ajax({
             url: 'module/search/controller/controllerSearch.php?op=autoComplete',
@@ -74,7 +77,7 @@ function autoComplete() {
             $(document).on('click scroll', function(event) {
                 if (event.target.id !== 'autocom') {
                     $('#searchAuto').fadeOut(500);
-                }
+                }// end_if
             });// end_click_scroll
             //////
         }).fail(function() {
@@ -88,14 +91,26 @@ function btnSearch() {
     //////
     $('#search-btn').on('click', function() {
         let objVar = {};
+        let idCons = [];
         //////
-        if ($('#drop-con').val() == 0) {
+        if (($('#drop-con').val() == 0) && (($('#drop-province').val() == 0))) {
             objVar = {'brand': [$('#autocom').val()]};
+            localStorage.setItem('filters', JSON.stringify(objVar));
+        }else if ($('#drop-province').val() != 0 && ($('#drop-con').val() == 0)) {
+            ajaxPromise('module/search/controller/controllerSearch.php?op=listCon', 'POST', 'JSON', {province: $('#drop-province').val()}).then(function(data) {
+                for (row in data) {
+                    idCons.push(data[row].idCon);
+                    console.log(idCons);
+                }// end_for
+                objVar = {'idCon': idCons, 'brand': [$('#autocom').val()]};
+                localStorage.setItem('filters', JSON.stringify(objVar));
+            }).catch(function() {
+                console.log('F');
+            });
         }else {
             objVar = {'idCon': [$('#drop-con').val()], 'brand': [$('#autocom').val()]};
+            localStorage.setItem('filters', JSON.stringify(objVar));
         }// end_else
-        //////
-        localStorage.setItem('filters', JSON.stringify(objVar));
         //////
         window.location.href = 'index.php?page=shop&op=list';
     });// end_search-btn

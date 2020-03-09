@@ -37,8 +37,8 @@ function loadShop(modal = false, itemsPage = 12, totalItems = 0) {
             $('#main-shop').css({'height': ($('.container-filter').height() + 100)})
         }
     }).fail(function() {
-        localStorage.removeItem('filters');
-        location.reload();
+        //localStorage.removeItem('filters');
+        //location.reload();
     });// end_ajax
 }// end_loadShop
 //////
@@ -277,7 +277,7 @@ function loadPagination(data = null) {
         }).on("page", function(event, num) {
             totalItems = 12 * (num - 1)
             loadShop(false, 12, totalItems);
-            $('html, body').animate({scrollTop: '0'}, 500);
+            $('html, body').animate({scrollTop: $('.site').height()}, 500);
         });
     }).fail(function() {
         console.log('Fail when trying to get the products.');
