@@ -1,5 +1,0 @@
-- Añadir Crear Marca
-- Formulario: subir imagenes, (actualizar marca si se hace lo anterior)
-- Shop: más filtros
-- Home: añadir más categorias
-- Login: hacerlo
