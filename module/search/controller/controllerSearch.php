@@ -17,7 +17,14 @@ switch ($_GET['op']) {
         break;
         //////
     case 'listCon';
-        $selCon = $searchQuerys -> multiple('SELECT * FROM concessionaire WHERE province="' . $_GET['province'] . '"ORDER BY nameCon');
+        $select = "";
+        //////
+        if ($_POST['province']) {
+            $select = 'SELECT * FROM concessionaire WHERE province="' . $_POST['province'] . '"ORDER BY nameCon';
+        }else {
+            $select = 'SELECT * FROM concessionaire';
+        }// end_else
+        $selCon = $searchQuerys -> multiple($select);
         //////
         if (!empty($selCon)) {
             echo json_encode($selCon);

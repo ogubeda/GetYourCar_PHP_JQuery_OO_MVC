@@ -13,25 +13,38 @@ function listDropProvinces() {
 }// end_listDropBrands
 //////
 
-function listDropCon() {
+function listDropCon(data = undefined) {
     //////
-    $('#drop-province').on('change', function() {
-        let prov = $(this).val();
-        $.ajax({
-            url: 'module/search/controller/controllerSearch.php?op=listCon&province=' + prov,
-            type: 'GET',
-            dataType: 'JSON'
-        }).done(function(data) {
-            $('#drop-con').empty();
-            $('#drop-con').append('<option value = "0">Select the Concessionaire</option>');
-            for (row in data) {
-                $('#drop-con').append('<option value = "' + data[row].idCon + '">' + data[row].nameCon + '</option>');
-            }
-        }).fail(function() {
+    $.ajax({
+        url: 'module/search/controller/controllerSearch.php?op=listCon',
+        type: 'POST',
+        dataType: 'JSON',
+        data: data
+    }).done(function(data) {
+        $('#drop-con').empty();
+        $('#drop-con').append('<option value = "0">Select the Concessionaire</option>');
+        for (row in data) {
+            $('#drop-con').append('<option value = "' + data[row].idCon + '">' + data[row].nameCon + '</option>');
+        }// end_for
+    }).fail(function() {
             console.log('F');
-        });
     });
 }// end_listDropCon
+//////
+
+function launchDropCon() {
+    //////
+    listDropCon();
+    //////
+    $('#drop-province').on('change', function(){
+        let prov = $(this).val();
+        if (prov === 0) {
+            listDropCon();
+        }else {
+            listDropCon({province: prov});
+        }// end_else
+    });
+}// end_launchDropCon
 //////
 
 function autoComplete() {
@@ -91,7 +104,7 @@ function btnSearch() {
 
 $(document).ready(function() {
     listDropProvinces();
-    listDropCon();
+    launchDropCon();
     autoComplete();
     btnSearch();
 });// end_document.ready
