@@ -69,16 +69,16 @@ function autoComplete() {
             //////
             $(document).on('click', '.searchElement', function() {
                 $('#autocom').val(this.getAttribute('id'));
-                $('#searchAuto').fadeOut(1000);
-            });
+                $('#searchAuto').fadeOut(500);
+            });// end_click
             $(document).on('click scroll', function(event) {
                 if (event.target.id !== 'autocom') {
                     $('#searchAuto').fadeOut(500);
                 }
-            })
+            });// end_click_scroll
             //////
         }).fail(function() {
-            console.log('f');
+            $('#searchAuto').fadeOut(500);
         });// end_fail
     });
 }// end_autoComplete

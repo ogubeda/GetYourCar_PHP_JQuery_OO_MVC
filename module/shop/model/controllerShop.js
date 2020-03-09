@@ -264,14 +264,14 @@ function loadPagination(data = null) {
         let totalPages = 0;
         //////
         for (let i = 0; i < data.prods; i++) {
-            if ((i / 12) == 1) {
+            if ((i % 12) == 0) {
                 totalPages = totalPages + 1;
             }// end_if
         }// end_for
         $('#pagination-shop').bootpag({
-            total: totalPages + 1,
+            total: totalPages,
             page: 1,
-            maxVisible: totalPages + 1,
+            maxVisible: totalPages,
             prev: 'Prev',
             next: 'Next'
         }).on("page", function(event, num) {
