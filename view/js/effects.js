@@ -14,26 +14,24 @@ function parallaxScroll() {
 }// end_parallaxScroll
 //////
 
-function footerOnBottom() {
-    //////
-    $("footer").removeClass("fixed-footer");
-    var windHeight = $(window).height();
-    var x = $("header").height() + $(".content").height();
-    if (($('.hero-slider').length) || ($('.list-cars').length) || ($('#userOrderList').length) || ($('.container-shop').length)) {
-        x = windHeight + 1000;
-    }
-    if (windHeight > x) {
-        $("footer").addClass("fixed-footer");
-    }// end_if
-}// end_footerOnBottom
-//////
-
 function lowCharge() {
     //////
     $('.page-title').Lazy();
     $('.single-slide').Lazy();
     $('.inner').Lazy();
 }// end_lowCharge
+//////
+
+function openSideNav() {
+    //////
+    $('#more-options').on('click', function() {
+        $('#options-sideNav').show(150);
+    });
+    //////
+    $('#close-options-sideNav').on('click', function() {
+        $('#options-sideNav').hide(150);
+    });
+}// end_openSideNav
 //////
 
 function addLSPage() {
@@ -52,7 +50,7 @@ function addLSPage() {
 
 $(document).ready(function() {
     addLSPage();
+    openSideNav();
     lowCharge();
-    //footerOnBottom();
     parallaxScroll();
 });

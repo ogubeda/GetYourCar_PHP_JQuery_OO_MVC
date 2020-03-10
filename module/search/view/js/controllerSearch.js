@@ -95,22 +95,27 @@ function btnSearch() {
         //////
         if (($('#drop-con').val() == 0) && (($('#drop-province').val() == 0))) {
             objVar = {'brand': [$('#autocom').val()]};
-            localStorage.setItem('filters', JSON.stringify(objVar));
         }else if ($('#drop-province').val() != 0 && ($('#drop-con').val() == 0)) {
-            ajaxPromise('module/search/controller/controllerSearch.php?op=listCon', 'POST', 'JSON', {province: $('#drop-province').val()}).then(function(data) {
+            $.ajax({
+                url: 'module/search/controller/controllerSearch.php?op=listCon',
+                type: 'POST',
+                async: false,
+                dataType: 'JSON',
+                data: {province: $('#drop-province').val()}
+            }).done(function(data) {
                 for (row in data) {
                     idCons.push(data[row].idCon);
-                    console.log(idCons);
-                }// end_for
-                objVar = {'idCon': idCons, 'brand': [$('#autocom').val()]};
-                localStorage.setItem('filters', JSON.stringify(objVar));
-            }).catch(function() {
+                }// ebd_for
+            }).fail(function() {
                 console.log('F');
-            });
+            });// end_ajax
+            //////
+            objVar = {'idCon': idCons, 'brand': [$('#autocom').val()]};
         }else {
             objVar = {'idCon': [$('#drop-con').val()], 'brand': [$('#autocom').val()]};
-            localStorage.setItem('filters', JSON.stringify(objVar));
         }// end_else
+        //////
+        localStorage.setItem('filters', JSON.stringify(objVar));
         //////
         window.location.href = 'index.php?page=shop&op=list';
     });// end_search-btn
