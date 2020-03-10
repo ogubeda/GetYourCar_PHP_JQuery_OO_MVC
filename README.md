@@ -25,6 +25,7 @@ Our Cars | It's the admin module for managing the application.
 Contact Us | Used for contact with the company.
 Log In | (In progress)
 
+```bash
 ├── index.php
 ├── model
 ├── module
@@ -55,6 +56,7 @@ Log In | (In progress)
     │   │   └── styles
     │   └── slick  
     └── lang
+ ```
 
 ## Author
 
