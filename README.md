@@ -50,7 +50,7 @@ Log In | (In progress)
     │   └── sass
     ├── css
     ├── img
-    │   ├── allCarsImg
+    │   └── allCarsImg
     ├── inc
     ├── js
     │   ├── jqwidgets
