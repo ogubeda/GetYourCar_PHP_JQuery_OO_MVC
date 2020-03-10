@@ -37,7 +37,7 @@ switch ($_GET['op']) {
         $select = 'SELECT DISTINCT brand FROM allCars';
         if (isset($_POST['dropCon'])) {
             $select = $select . ' WHERE idCon ="' . $_POST['dropCon'] . '" AND brand LIKE "' . $_POST['complete'] . '%"';
-        }else if (isset($_POST['province'])) {
+        }else if ((isset($_POST['province'])) && (!isset($_POST['dropCon']))) {
             $select = $select . ' WHERE idCon IN (SELECT idCon FROM concessionaire WHERE province ="' . $_POST['province']. '") AND brand like "' . $_POST['complete'] . '%"';
         }else {
             $select = $select . ' WHERE brand LIKE "' . $_POST['complete'] . '%"';

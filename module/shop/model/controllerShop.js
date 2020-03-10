@@ -37,8 +37,8 @@ function loadShop(modal = false, itemsPage = 12, totalItems = 0) {
             $('#main-shop').css({'height': ($('.container-filter').height() + 100)})
         }
     }).fail(function() {
-        //localStorage.removeItem('filters');
-        //location.reload();
+        localStorage.removeItem('filters');
+        location.reload();
     });// end_ajax
 }// end_loadShop
 //////
@@ -243,16 +243,16 @@ function filter(key, value, modal = false) {
     //////
     highlightFilters();
     loadShop(modal);
-    loadPagination(localStorage.getItem('filters'));
+    loadPagination();
 }// end_filter
 //////
 
-function loadPagination(data = null) {
+function loadPagination() {
     //////
     let url = 'module/shop/controller/controllerShop.php?op=countProd';
     //////
-    if (data != null) {
-        url = 'module/shop/controller/controllerShop.php?op=countProd&filters=' + data;
+    if (localStorage.getItem('filters')) {
+        url = 'module/shop/controller/controllerShop.php?op=countProd&filters=' + localStorage.getItem('filters');
     }// end_if
     //////
     $.ajax({
@@ -260,20 +260,26 @@ function loadPagination(data = null) {
         dataType: 'JSON',
         type: 'POST',
     }).done(function(data) {
-        let totalItems = 0;
-        let totalPages = 0;
+        let totalItems = 0, totalPages = 0;
+        let prevPage = false, nextPage = false;
         //////
         for (let i = 0; i < data.prods; i++) {
             if ((i % 12) == 0) {
                 totalPages = totalPages + 1;
             }// end_if
         }// end_for
+        //////
+        if (totalPages > 1) {
+            prevPage = 'Prev';
+            nextPage = 'Next';
+        }// end_if
+        //////
         $('#pagination-shop').bootpag({
             total: totalPages,
             page: 1,
             maxVisible: totalPages,
-            prev: 'Prev',
-            next: 'Next'
+            prev: prevPage,
+            next: nextPage
         }).on("page", function(event, num) {
             totalItems = 12 * (num - 1)
             loadShop(false, 12, totalItems);
