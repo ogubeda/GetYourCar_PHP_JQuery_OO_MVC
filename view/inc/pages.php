@@ -11,6 +11,9 @@ switch ($_GET['page']) {
 	case "our-cars";
 		include ("module/cars/controller/controllerCars.php");
 		break;
+	case "our-brands";
+		include ("module/brand-crud/controller/controllerCrudBrand.php");
+		break;
 	case "services";
 		include ("module/services/services.html");
 		break;

@@ -9,6 +9,8 @@
         include ('view/inc/topPageContact.html');
     }else if ((isset($_GET['page'])) && ($_GET['page'] === 'log-in')) {
         include ('view/inc/topPageLogIn.html');
+    }else if ((isset($_GET['page']) && ($_GET['page'] === 'our-brands'))) {
+        include ('view/inc/topPageBrands.html');
 	}else {
 		include("view/inc/topPage.html");
 	}
