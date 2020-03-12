@@ -290,6 +290,15 @@ function loadPagination() {
     }); // end_fail
 }// end_loadPagination
 
+function addAPI() {
+    //////
+    var script = document.createElement('script');
+    script.async = true;
+    script.defer = true;
+    script.src = 'https://maps.googleapis.com/maps/api/js?key=' + googleApi;
+    $('head').append(script);
+}// end_addAPI
+
 function removeFilters() {
     /////
     $(document).on('click', '#remove-filters', function() {
@@ -306,6 +315,7 @@ function loadContent(){
     if (localStorage.getItem('currentPage') == 'shop-details') {
         showDetails();
     }else {
+        addAPI();
         loadFilters();
         loadPagination();
         loadMapModal();

@@ -1,3 +1,12 @@
+function addAPI() {
+    //////
+    var script = document.createElement('script');
+    script.async = true;
+    script.defer = true;
+    script.src = 'https://maps.googleapis.com/maps/api/js?key=' + googleApi + '&callback=loadMap';
+    $('head').append(script);
+}// end_addAPI
+
 function loadMap() {
     var location = {lat: 38.809893, lng: -0.604617}; 
     var map = new google.maps.Map(document.getElementById('map'), {
@@ -31,6 +40,7 @@ function loadMap() {
 //////
 
 $(document).ready(function() {
+    addAPI();
     localStorage.setItem('currentPage', 'contact');
     //loadMap();
 });
