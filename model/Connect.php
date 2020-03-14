@@ -4,7 +4,9 @@ class Connect {
     //////
     public static function enable() {
         //////
-        $connection = mysqli_connect("localhost", "project", "147853xLash.", "Project_Cars");
+        $ini_file = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/frameworkCars.v.1.2/model/api-keys/apis.ini');
+        //////
+        $connection = mysqli_connect($ini_file['IPAddress'], $ini_file['username'], $ini_file['password'], $ini_file['dataBase']);
         //////
         if (!$connection) {
             echo mysqli_connect_error();

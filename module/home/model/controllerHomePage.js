@@ -64,6 +64,29 @@ function detectScrollBrands() {
 }// end_detectScrollBrands
 ///////
 
+function loadMoreHistory() {
+    //////
+    $('<h1></h1>').html('Are you interested in history?').appendTo('#some-history');
+    $('<div></div>').appendTo('#some-history').attr({'id': 'container-history', 'class': 'row'});
+    //////
+    $.ajax({
+        url: 'http://ergast.com/api/f1/1997/qualifying/1.json',
+        type: 'POST',
+        dataType: 'JSON'
+    }).done(function(data) {
+        const content = data.MRData.RaceTable.Races;
+        //////
+        for (row in content) {
+
+            $('<div></div>').html(content[row].raceName).attr({'id' : content[row].Circuit.circuitId, 'class' : 'card-history'}).appendTo('#container-history');
+            console.log(content[row].Circuit.circuitId);
+        }// end_for
+    }).fail(function() {
+        console.log('Fail when trying to get the informartion.');
+    }); // end_ajax
+}// end_loadMoreHistory
+//////
+
 function loadDivs() {
     //////
     //////
@@ -71,6 +94,7 @@ function loadDivs() {
     $('<div></div>').attr({'id': "containerCategories", 'class':'row'}).appendTo('#homePage');
     //////
     loadSlider();
+    loadMoreHistory();
     loadCatBrands();
     detectScrollBrands();
 }// end_loadDivs

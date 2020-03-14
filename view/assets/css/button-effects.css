@@ -1,4 +1,4 @@
-.card-shop {
+.card-shop, .card-history {
     text-align: center;
     margin: 15px 0;
     -ms-flex: 0 0 33.333333%;
@@ -23,6 +23,7 @@
     padding-left: 15px;
     
 }
+
 .card-shop .inner, .card-shop-modal .inner {
     border: 1px solid #2d2a2e;
     border-radius: 5px;
