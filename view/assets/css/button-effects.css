@@ -1,4 +1,4 @@
-.card-shop, .card-history {
+.card-shop {
     text-align: center;
     margin: 15px 0;
     -ms-flex: 0 0 33.333333%;
@@ -10,7 +10,8 @@
     padding-right: 15px;
     padding-left: 15px;
     
-}.card-shop-modal {
+}
+.card-shop-modal {
     text-align: center;
     margin: 15px 0;
     -ms-flex: 0 0 50%;
@@ -22,6 +23,33 @@
     padding-right: 15px;
     padding-left: 15px;
     
+}
+.card-history {
+    text-align: center;
+    margin: 15px 0;
+    -ms-flex: 0 0 25%;
+    flex: 0 0 25%;
+    max-width: 25%;
+    position: relative;
+    width: 100%;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 15px;
+    font-size: 18px;
+}
+.card-history .inner {
+    border: 1px solid #19181a;
+    border-radius: 10px;
+    padding: 40px 10px;
+    transition: 0.2s box-shadow ease-in-out;
+    box-shadow: 0px 0px 5px 0.5px#19181a,
+                6px 6px 26px #000,
+                -6px -6px 26px #302e31;
+}
+.card-history .inner-active {
+    box-shadow: inset 0px 0px 5px 0.5px#19181a,
+                inset 6px 6px 26px #000,
+                inset -6px -6px 26px #302e31;
 }
 
 .card-shop .inner, .card-shop-modal .inner {

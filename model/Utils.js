@@ -23,7 +23,7 @@ function ajaxPromise(sUrl, sType, sTData, sData = undefined) {
         }).done((data) => {
             resolve(data);
         }).fail((jqXHR, textStatus, errorThrow) => {
-            reject(errorThrow);
+            reject(new Error(errorThrow));
         }); // end_ajax
     });
 }
