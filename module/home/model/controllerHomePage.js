@@ -95,7 +95,7 @@ function showHistoryContent() {
         ajaxPromise('http://ergast.com/api/f1/1997/circuits/' + this.getAttribute('id') + '/qualifying/1.json', 'POST', 'JSON')
         .then(function(data) {
             $('#container-info-history').empty();
-            $('<div></div>').attr({'id': 'data-content'}).appendTo('#container-info-history');
+            $('<div></div>').attr({'id': 'data-content', 'style': 'float: left; margin-right: 15px'}).appendTo('#container-info-history');
             $('<div></div>').attr({'id': 'gmap-content'}).appendTo('#container-info-history');
             $('<div></div>').attr({'id': 'map', 'style': 'width: auto; height: 400px'}).appendTo('#container-info-history');
             //////
@@ -103,27 +103,24 @@ function showHistoryContent() {
             let winerInfo = data.MRData.RaceTable.Races[0].QualifyingResults[0];
             let location = {lat: parseFloat(circuitInfo.Circuit.Location.lat), lng: parseFloat(circuitInfo.Circuit.Location.long)};
             let map = new google.maps.Map(document.getElementById('map'), {
-                zoom: 5,
-                center: location
+                zoom: 6,
+                center: location,
             });
             let marker = new google.maps.Marker({
-                location: location,
-                map: map
+                position: location,
+                map: map,
+                title: 'test',
             });
             //////
-            //////
-            console.log(winerInfo);
-            console.log(circuitInfo);
-            //////
-            //////
-            $('<h4></h4>').html(circuitInfo.Circuit.circuitName).appendTo('#data-content');
-            $('<h4></h4>').html('Date: <span>' + circuitInfo.date + '</span>').appendTo('#data-content');
-            $('<h4></h4>').html('Locality: <span>' + circuitInfo.Circuit.Location.locality + '</span>').appendTo('#data-content');
+            $('<h3></h3>').html('Circuit').appendTo('#data-content');
+            $('<h5></h5>').html(circuitInfo.Circuit.circuitName).appendTo('#data-content');
+            $('<h5></h5>').html('Date: <span>' + circuitInfo.date + '</span>').appendTo('#data-content');
+            $('<h5></h5>').html('Locality: <span>' + circuitInfo.Circuit.Location.locality + '</span>').appendTo('#data-content');
             $('<h3></h3>').html('Winner').appendTo('#data-content');
-            $('<h4>/h4>').html(winerInfo.Driver.givenName + ' ' + winerInfo.Driver.familyName).appendTo('#data-content');
-            $('<h4></h4>').html('Birth: <span>' + winerInfo.Driver.dateOfBirth + '</span>').appendTo('#data-content');
-            $('<h4></h4>').html('Number: <span>' + winerInfo.number + '</span>').appendTo('#data-content');
-            $('<h4></h4>').html('Nationality: <span>' + winerInfo.Driver.nationality + '</span>').appendTo('#data-content');
+            $('<h5>/h5>').html(winerInfo.Driver.givenName + ' ' + winerInfo.Driver.familyName).appendTo('#data-content');
+            $('<h5></h5>').html('Birth: <span>' + winerInfo.Driver.dateOfBirth + '</span>').appendTo('#data-content');
+            $('<h5></h5>').html('Number: <span>' + winerInfo.number + '</span>').appendTo('#data-content');
+            $('<h5></h5>').html('Nationality: <span>' + winerInfo.Driver.nationality + '</span>').appendTo('#data-content');
             $('#container-info-history').toggle();
         });// end_Promise
     });// end_click

@@ -29,13 +29,13 @@ function checkLogIn() {
 function loadRegister() {
     //////
     $('.container-login').empty();
-    $('<form></form>').attr({'method': 'POST', 'name': 'registerForm', 'id': 'registerForm', 'class': 'separe-menu'}).html('<h2>Register</h2>').appendTo('.container-login');
-    $('<div></div>').attr({'class': 'input'}).html('<h6 id = "input-username">Username</h6><input type="text" name="username" id="username" placeholder = "Username"/>').appendTo('#registerForm');
-    $('<div></div>').attr({'class': 'input'}).html('<h6 id="input-email">Email</h6><input type="text" name="email" id="email" placeholder = "example@domain.com"/>').appendTo('#registerForm');
-    $('<div></div>').attr({'class': 'input'}).html('<h6 id="input-password">Password</h6><input type="password" name="password" id="password" placeholder = "Password"/>').appendTo('#registerForm');
-    $('<div></div>').attr({'class': 'input', 'id': 'container-re_password'}).html('<h6 id="input-re_password">Re-type Password</h6><input type="password" name="re-password" id="re-password" placeholder = "Password"/>').appendTo('#registerForm');
-    $('<div></div>').attr({'class': 'input'}).html('<input type="button" value = "Register" class = "reg-check-btn" style = "color: #0ca3e9"/>').appendTo('#registerForm');
-    $('<div></div>').attr({'class': 'input'}).html('<input type="button" value = "Back" class = "reg-back-btn" style = "color: #ff5722"/>').appendTo('#registerForm');
+    $('<form></form>').attr({'method': 'POST', 'name': 'registerForm', 'id': 'registerForm', 'class': 'separe-menu', 'autocomplete': 'off'}).html('<h2>Register</h2>').appendTo('.container-login');
+    $('<div></div>').attr({'class': 'input', 'autocomplete': 'off'}).html('<h6 id = "input-username">Username</h6><input type="text" name="username" id="username" placeholder = "Username"/>').appendTo('#registerForm');
+    $('<div></div>').attr({'class': 'input', 'autocomplete': 'off'}).html('<h6 id="input-email">Email</h6><input type="text" name="email" id="email" placeholder = "example@domain.com"/>').appendTo('#registerForm');
+    $('<div></div>').attr({'class': 'input', 'autocomplete': 'off'}).html('<h6 id="input-password">Password</h6><input type="password" name="password" id="password" placeholder = "Password"/>').appendTo('#registerForm');
+    $('<div></div>').attr({'class': 'input', 'id': 'container-re_password', 'autocomplete': 'off'}).html('<h6 id="input-re_password">Re-type Password</h6><input type="password" name="re-password" id="re-password" placeholder = "Password"/>').appendTo('#registerForm');
+    $('<div></div>').attr({'class': 'input', 'autocomplete': 'off'}).html('<input type="button" value = "Register" class = "reg-check-btn" style = "color: #0ca3e9"/>').appendTo('#registerForm');
+    $('<div></div>').attr({'class': 'input', 'autocomplete': 'off'}).html('<input type="button" value = "Back" class = "reg-back-btn" style = "color: #ff5722"/>').appendTo('#registerForm');
 }// end_loadRegister
 
 function btnsRegister() {
@@ -71,8 +71,20 @@ function checkRegister() {
     }// end_for
     //////
     if (error == false) {
-        document.registerForm.submit();
-    }
+        user.password = CryptoJS.AES.encrypt(user.password, passPhrase).toString(CryptoJS.enc.Utf8);
+        console.log(user.password);
+        console.log(CryptoJS.AES.decrypt(user.password, passPhrase).toString(CryptoJS.enc.Utf8));
+        $.ajax({
+            url: 'module/login/controller/controllerLogIn.php?op=register',
+            type: 'POST',
+            dataType: 'JSON',
+            data: user
+        }).done(function(data) {
+            console.log(data);
+        }).fail(function() {
+            console.log('Fail when trying to register.');
+        });// end_fail
+    }// end_if
 }// end_checkRegister
 
 function regExData(user) {
@@ -106,6 +118,8 @@ function regExContent(value, regEx) {
 }// end_checkContent
 
 function loadContent() {
+    //////
+    $('.container-search').remove();
     //////
     if (localStorage.getItem('currentPage') == 'register') {
        loadRegister();
