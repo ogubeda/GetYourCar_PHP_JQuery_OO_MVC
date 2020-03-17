@@ -24,7 +24,21 @@ function checkLogIn() {
             break;
         }// end_if
     }// end_for
+    //////
+    if (error == false) {
+        user.password = CryptoJS.MD5(user.password).toString();
+        requestLogIn(user);
+    }//end_if
 }// end_checkLogIn
+
+function requestLogIn(user) {
+    //////
+    ajaxPromise('module/login/controller/controllerLogIn.php?op=logIn', 'POST', 'JSON', user).then(function(data) {
+        console.log(data);
+    }).catch(function(error) {
+        console.log(error);
+    });// end_promise
+}// end_requestLogIn
 
 function loadRegister() {
     //////
@@ -71,21 +85,46 @@ function checkRegister() {
     }// end_for
     //////
     if (error == false) {
-        user.password = CryptoJS.AES.encrypt(user.password, passPhrase).toString(CryptoJS.enc.Utf8);
+        user.password = CryptoJS.MD5(user.password).toString();
         console.log(user.password);
-        console.log(CryptoJS.AES.decrypt(user.password, passPhrase).toString(CryptoJS.enc.Utf8));
         $.ajax({
             url: 'module/login/controller/controllerLogIn.php?op=register',
             type: 'POST',
             dataType: 'JSON',
             data: user
         }).done(function(data) {
+            successRegister();
             console.log(data);
-        }).fail(function() {
+        }).fail(function(error) {
+            console.log(error.responseText);
             console.log('Fail when trying to register.');
         });// end_fail
     }// end_if
 }// end_checkRegister
+
+function successRegister() {
+    //////
+    $('#registerForm').empty();
+    $('<h2></h2>').html('Success').appendTo('#registerForm');
+    $('<p></p>').html('You have registered succesfully').appendTo('#registerForm');
+    $('<p></p>').html('Please select an option.').appendTo('#registerForm');
+    $('<div></div>').attr({'class': 'input', 'autocomplete': 'off'}).html('<input type="button" value = "Go to Log In" class = "go-login-btn" style = "color: #0ca3e9"/>').appendTo('#registerForm');
+    $('<div></div>').attr({'class': 'input', 'autocomplete': 'off'}).html('<input type="button" value = "Back to Home" class = "go-home-btn" style = "color: #ff5722"/>').appendTo('#registerForm');
+    //////
+    successRegisterBtns();
+}// end_successRegister
+
+function successRegisterBtns() {
+    //////
+    $(document).on('click', '.go-login-btn', function() {
+        localStorage.setItem('currentPage', 'logIn');
+        location.reload();
+    });//
+    //////
+    $(document).on('click', '.go-home-btn', function() {
+        window.location.href = "index.php?page=home&op=list";
+    });//
+}// end_succeddRegisterBtns
 
 function regExData(user) {
     //////

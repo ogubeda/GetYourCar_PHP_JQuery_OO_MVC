@@ -10,8 +10,8 @@ class QuerysHomePage {
         $query = DAOGeneral::query($select);
         $retrArray = array();
         //////
-        if (mysqli_num_rows($query) > 0) {
-            while ($row = mysqli_fetch_assoc($query)) {
+        if (mysqli_num_rows($query['query']) > 0) {
+            while ($row = mysqli_fetch_assoc($query['query'])) {
                 $retrArray[] = $row;
             }// end_while
         }// end_if
@@ -23,7 +23,7 @@ class QuerysHomePage {
         //////
         $query = DAOGeneral::query($select);
         //////
-        if ($query) {
+        if (!$query['error']) {
             return true;
         }else {
             return false;

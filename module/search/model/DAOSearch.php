@@ -8,8 +8,8 @@ class QuerysSearch {
         $query = DAOGeneral::query($query);
         $retrArr = array();
         //////
-        if (mysqli_num_rows($query) > 0) {
-            while ($row = mysqli_fetch_assoc($query)) {
+        if (mysqli_num_rows($query['query']) > 0) {
+            while ($row = mysqli_fetch_assoc($query['query'])) {
                 $retrArr[] = $row;
             }// end_while
         }// end_if

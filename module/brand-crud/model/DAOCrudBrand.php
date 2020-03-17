@@ -22,8 +22,8 @@ class QuerysBrand {
         $query = DAOGeneral::query($select);
         $values = array();
         //////
-        if (mysqli_num_rows($query)) {
-            while ($row = mysqli_fetch_assoc($query)) {
+        if (mysqli_num_rows($query['query'])) {
+            while ($row = mysqli_fetch_assoc($query['query'])) {
                 $values[] = $row;
             }// end_while
         }// end_if

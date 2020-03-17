@@ -9,8 +9,14 @@ class DAOGeneral {
         //////
         $connection = Connect::enable();
         $query = mysqli_query($connection, $values);
+        $error = false;
+        //////
+        if (!$query) {
+            $error = true;
+            $errorDesc = mysqli_error($connection);
+        }// end_if
         Connect::close($connection);
         //////
-        return $query;
+        return array('query' => $query, 'error' => $error, 'desc' => $errorDesc);
     }// end_select
 }// end_DAOGeneral

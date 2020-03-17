@@ -9,7 +9,7 @@ class QuerysShop {
         //////
         $query = DAOGeneral::query($select);
         //////
-        if ($query) {
+        if (!$query['error']) {
             return true;
         }else {
             return false;
@@ -22,8 +22,8 @@ class QuerysShop {
         $query = DAOGeneral::query($select);
         $returnValue = "";
         //////
-        if (mysqli_num_rows($query) > 0) {
-            $returnValue = mysqli_fetch_assoc($query);
+        if (mysqli_num_rows($query['query']) > 0) {
+            $returnValue = mysqli_fetch_assoc($query['query']);
         }// end_if
         //////
         return $returnValue;
@@ -35,8 +35,8 @@ class QuerysShop {
         $query = DAOGeneral::query($select);
         $returnArr = array();
         //////
-        if (mysqli_num_rows($query) > 0) {
-            while ($row = mysqli_fetch_assoc($query)) {
+        if (mysqli_num_rows($query['query']) > 0) {
+            while ($row = mysqli_fetch_assoc($query['query'])) {
                 $returnArr[] = $row;
             }// end_while
         }// end_if
@@ -52,8 +52,8 @@ class QuerysShop {
         foreach ($colsArr as $row) {
             $select = 'SELECT DISTINCT ' . $row . ' FROM allCars ORDER BY ' . $row;
             $query = DAOGeneral::query($select);;
-            if (mysqli_num_rows($query) > 0) {
-                while ($row_inner[] = mysqli_fetch_assoc($query)) {
+            if (mysqli_num_rows($query['query']) > 0) {
+                while ($row_inner[] = mysqli_fetch_assoc($query['query'])) {
                     $returnArrBrands[$row] = $row_inner;
                 }// end_while
                 unset($row_inner);
