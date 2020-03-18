@@ -19,13 +19,13 @@ function changeLang(lang) {
 
 $(document).ready(function() {
     changeLang();
-    $("#btn-es").on("click", function() {
+    $(document).on("click", "#btn-es",function() {
         changeLang('es')
         });
-    $("#btn-en").on("click", function() {
+    $(document).on("click", "#btn-en",function() {
         changeLang('en')
         });
-    $("#btn-val").on("click", function() {
+    $(document).on("click", "#btn-val",function() {
         changeLang('val')
     });
 });

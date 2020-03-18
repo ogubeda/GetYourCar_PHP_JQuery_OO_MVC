@@ -24,11 +24,11 @@ function lowCharge() {
 
 function openSideNav() {
     //////
-    $('#more-options').on('click', function() {
+    $(document).on('click', '#more-options',function() {
         $('#options-sideNav').show(150);
     });
     //////
-    $('#close-options-sideNav').on('click', function() {
+    $(document).on('click', '#close-options-sideNav',function() {
         $('#options-sideNav').hide(150);
     });
 }// end_openSideNav

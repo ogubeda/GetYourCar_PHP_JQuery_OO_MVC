@@ -9,10 +9,18 @@ switch ($_GET['page']) {
 		include ("module/shop/controller/controllerShop.php");
 		break;
 	case "our-cars";
-		include ("module/cars/controller/controllerCars.php");
+		if ($_SESSION['type'] == "admin") {
+			include ("module/cars/controller/controllerCars.php");
+		}else {
+			include ("view/inc/error404.html");
+		}// end_eñse
 		break;
 	case "our-brands";
-		include ("module/brand-crud/controller/controllerCrudBrand.php");
+		if ($_SESSION['type'] == 'admin') {
+			include ("module/brand-crud/controller/controllerCrudBrand.php");
+		}else {
+			include ("view/inc/error404.html");
+		}// end_else
 		break;
 	case "services";
 		include ("module/services/services.html");
@@ -21,7 +29,11 @@ switch ($_GET['page']) {
 		include ("module/contactus/controller/controllerContact.php");
 		break;
 	case "user-order";
-		include ("module/userOrder/controller/controllerUserOrder.php");
+		if ($_SESSION['type'] == "client") {
+			include ("module/userOrder/controller/controllerUserOrder.php");
+		}else {
+			include ('view/inc/error404.html');
+		}// end_else
 		break;
 	case "log-in";
 		include ("module/login/controller/controllerLogIn.php");
