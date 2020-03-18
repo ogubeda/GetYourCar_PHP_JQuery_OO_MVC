@@ -47,7 +47,17 @@
     box-shadow: -4px -4px 9px #323133,
                 2px 2px 7px #0f0e0f;
 }
+
 .container-login .input input[type="button"]:active {
+    box-shadow: inset -4px -4px 9px #323133,
+                inset 2px 2px 7px #0f0e0f;
+}
+.container-login .input input[type="submit"] {
+    margin-top: 10px;
+    box-shadow: -4px -4px 9px #323133,
+                2px 2px 7px #0f0e0f;
+}
+.container-login .input input[type="submit"]:active {
     box-shadow: inset -4px -4px 9px #323133,
                 inset 2px 2px 7px #0f0e0f;
 }

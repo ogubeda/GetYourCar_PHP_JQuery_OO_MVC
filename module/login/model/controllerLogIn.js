@@ -25,10 +25,13 @@ function checkLogIn() {
         }// end_if
     }// end_for
     //////
-    if (error == false) {
-        user.password = CryptoJS.MD5(user.password).toString();
-        requestLogIn(user);
-    }//end_if
+    $('#logInForm').submit(function(event) {
+        event.preventDefault();
+        if (error == false) {
+            user.password = CryptoJS.MD5(user.password).toString();
+            requestLogIn(user);
+        }//end_if
+    });
 }// end_checkLogIn
 
 function requestLogIn(user) {
@@ -48,7 +51,7 @@ function loadRegister() {
     $('<div></div>').attr({'class': 'input', 'autocomplete': 'off'}).html('<h6 id="input-email">Email</h6><input type="text" name="email" id="email" placeholder = "example@domain.com"/>').appendTo('#registerForm');
     $('<div></div>').attr({'class': 'input', 'autocomplete': 'off'}).html('<h6 id="input-password">Password</h6><input type="password" name="password" id="password" placeholder = "Password"/>').appendTo('#registerForm');
     $('<div></div>').attr({'class': 'input', 'id': 'container-re_password', 'autocomplete': 'off'}).html('<h6 id="input-re_password">Re-type Password</h6><input type="password" name="re-password" id="re-password" placeholder = "Password"/>').appendTo('#registerForm');
-    $('<div></div>').attr({'class': 'input', 'autocomplete': 'off'}).html('<input type="button" value = "Register" class = "reg-check-btn" style = "color: #0ca3e9"/>').appendTo('#registerForm');
+    $('<div></div>').attr({'class': 'input', 'autocomplete': 'off'}).html('<input type="submit" value = "Register" class = "reg-check-btn" style = "color: #0ca3e9"/>').appendTo('#registerForm');
     $('<div></div>').attr({'class': 'input', 'autocomplete': 'off'}).html('<input type="button" value = "Back" class = "reg-back-btn" style = "color: #ff5722"/>').appendTo('#registerForm');
 }// end_loadRegister
 
@@ -65,10 +68,10 @@ function btnsRegister() {
 
 function checkRegister() {
     //////
-    var user = {'username': document.getElementById('username').value, 
-                'email': document.getElementById('email').value, 
-                'password': document.getElementById('password').value, 
-                're_password': document.getElementById('re-password').value};
+    var user = {'username': $('#username').val(), 
+                'email': $('#email').val(), 
+                'password': $('#password').val(), 
+                're_password': $('#re-password').val()};
     //////
     var results = regExData(user);
     var error = false;
@@ -84,22 +87,24 @@ function checkRegister() {
         }// end_if
     }// end_for
     //////
-    if (error == false) {
-        user.password = CryptoJS.MD5(user.password).toString();
-        console.log(user.password);
-        $.ajax({
-            url: 'module/login/controller/controllerLogIn.php?op=register',
-            type: 'POST',
-            dataType: 'JSON',
-            data: user
-        }).done(function(data) {
-            successRegister();
-            console.log(data);
-        }).fail(function(error) {
-            console.log(error.responseText);
-            console.log('Fail when trying to register.');
-        });// end_fail
-    }// end_if
+    $('#registerForm').submit(function(event) {
+        event.preventDefault();
+        if (error == false) {
+            user.password = CryptoJS.MD5(user.password).toString();
+            $.ajax({
+                url: 'module/login/controller/controllerLogIn.php?op=register',
+                type: 'POST',
+                dataType: 'JSON',
+                data: user
+            }).done(function(data) {
+                successRegister();
+                console.log(data);
+            }).fail(function(error) {
+                console.log(error.responseText);
+                console.log('Fail when trying to register.');
+            });// end_fail
+        }// end_if
+    });
 }// end_checkRegister
 
 function successRegister() {
