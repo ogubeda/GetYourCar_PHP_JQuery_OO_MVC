@@ -2,7 +2,9 @@
 //////
 $path = $_SERVER['DOCUMENT_ROOT'] . '/frameworkCars.v.1.2/';
 include ($path . 'module/login/model/DAOLogin.php');
+include ($path . 'module/login/model/activity/processingSession.php');
 @session_start();
+session_name('dtte');
 //////
 $querys = new LogInQuerys();
 //////
@@ -27,22 +29,15 @@ switch ($_GET['op']) {
     case 'logIn';
         $getUserData = $querys -> singleQuery("SELECT * FROM users WHERE username = '$_POST[username]'");
         if ((!empty($getUserData)) && (password_verify($_POST['password'], $getUserData['password']))) {
+            loadSession($getUserData['username'], $getUserData['type'], $getUserData['avatar']);
             echo json_encode('Log In Successfull');
-            $_SESSION['user'] = $getUserData['username'];
-            $_SESSION['type'] = $getUserData['type'];
-            $_SESSION['avatar'] = $getUserData['avatar'];
-            $_SESSION['time'] = time();
         }else {
             echo "error";
         }// end_else
         break;
         //////
     case 'returnSession';
-        if ($_SESSION) {
-            echo json_encode($_SESSION);
-        }else {
-            echo "Empty";
-        }// end_else
+        echo returnUserSession();
         break;
         //////
     case 'logOut';
@@ -50,6 +45,14 @@ switch ($_GET['op']) {
             echo json_encode('Done');
         }else {
             echo 'Error';
+        }// end_else
+        break;
+        //////
+    case 'reload';
+        if (updateSession(true)) {
+            echo json_encode('Updated.');
+        }else {
+            echo 'Something has ocurred';
         }// end_else
         break;
         //////

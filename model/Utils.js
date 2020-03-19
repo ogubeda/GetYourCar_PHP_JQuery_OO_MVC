@@ -32,9 +32,9 @@ function loadMenu() {
             clientMenu();
         }// end_else
         //////
-        logOut();
-    }).catch(function(f) {
-        console.log(f);
+        addActivity();
+        logOutClick();
+    }).catch(function() {
         $('<li></li>').html('<a href = "index.php?page=log-in&op=list" class = "menu-btn" id = "logIn">Log In</a>').appendTo('#fixed-menu');
     }).then(function() {
         fixedMenu();
@@ -73,22 +73,32 @@ function fixedMenu() {
 }// end_fixedMenu
 //////
 
-function logOut() {
+function logOutClick() {
     //////
     $(document).on('click', '#log-out-btn', function() {
-        $.ajax({
-            url: 'module/login/controller/controllerLogIn.php?op=logOut',
-            type: 'POST',
-            dataType: 'JSON'
-        }).done(function() {
-            console.log('Session closed.');
-            window.location.href = "index.php?page=home&op=list";
-        }).fail(function() {
-            console.log('Something has occured');
-        });// end_ajax
+        logOut();
     });
-}// end_logOut
+}// end_logOutClick
 //////
+
+function logOut() {
+    $.ajax({
+        url: 'module/login/controller/controllerLogIn.php?op=logOut',
+        type: 'POST',
+        dataType: 'JSON'
+    }).done(function() {
+        console.log('Session closed.');
+        window.location.href = "index.php?page=home&op=list";
+    }).fail(function() {
+        console.log('Something has occured');
+    });// end_ajax
+}// end_logOut
+
+function addActivity() {
+    var script = document.createElement('script');
+    script.src = "module/login/model/activity/js/activity.js";
+    $('head').append(script);
+}// end_addActivity
 
 $(document).ready(function() {
     loadMenu();

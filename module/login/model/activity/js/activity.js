@@ -1,0 +1,47 @@
+let timer = 0;
+//////
+
+function launchCounter() {
+    //////
+    let interval = setInterval(timeCounter, 60000)
+}// end_launchCounter
+
+function timeCounter() {
+    //////
+    timer = timer + 1;
+    //////
+    if (time > 4) {
+        reloadSession();
+    }// end_if
+    if (timer > 14) {
+        timer = 0;
+        logOut();
+    }//
+    console.log(timer);
+}// end_timeCounter
+
+function reloadSession() {
+    //////
+    $.ajax({
+        url: 'module/login/controller/controllerLogIn.php?op=reload',
+        type: 'POST',
+        dataType: 'JSON'
+    }).done(function(data) {
+        console.log(data);
+    }).fail(function(f) {
+        console.log(f.responseText);
+    })
+}// end_reloadSession
+
+function checkActivity() {
+    //////
+    $(document).on('mousedown mousemove keydown scroll touchstart', function() {
+        timer = 0;
+    });
+    //////
+}// end_checkActivity
+
+$(document).ready(function() {
+    checkActivity();
+    launchCounter();
+});
