@@ -14,16 +14,19 @@ switch ($_GET['op']) {
         break;
         //////
     case 'register';
-        $hashEmail = md5(strtolower(trim($_POST['email'])));
-        $selectedAvatar = "https://avatars.dicebear.com/v2/jdenticon/" . $hashEmail . ".svg";
-        $registerQuery = $querys -> booleanQuery("INSERT INTO users (username, email, password, registerDate, avatar, type) 
-                                                VALUES ('$_POST[username]', '$_POST[email]', '" . password_hash($_POST['password'], PASSWORD_DEFAULT) . "', 0, '$selectedAvatar', 'client')");
+        $check = $querys -> checkKeys($_POST['username'], $_POST['email']);
         //////
-        if (!$registerQuery['error']) {
-            echo json_encode('done');
-        }else {
-            echo $registerQuery['desc'];
-        }// end_if
+        if (!$check) {
+            $registerQuery = $querys -> booleanQuery($_POST['username'], $_POST['email'], $_POST['password']);
+            //////
+            if (!$registerQuery['error']) {
+                echo json_encode('done');
+            }else {
+                echo $registerQuery['desc'];
+            }// end_if
+        }else { 
+            echo 'Duplicated';
+        }// end_else
         break;
         //////
     case 'logIn';

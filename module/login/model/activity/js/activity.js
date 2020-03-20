@@ -3,21 +3,18 @@ let timer = 0;
 
 function launchCounter() {
     //////
-    let interval = setInterval(timeCounter, 60000)
+    let interval = setInterval(timeCounter(), 60000);
+    let launchSession = setInterval(reloadSession(), 300000);
 }// end_launchCounter
 
 function timeCounter() {
     //////
     timer = timer + 1;
     //////
-    if (time > 4) {
-        reloadSession();
-    }// end_if
     if (timer > 14) {
         timer = 0;
         logOut();
     }//
-    console.log(timer);
 }// end_timeCounter
 
 function reloadSession() {

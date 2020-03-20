@@ -6,7 +6,13 @@ include ($path . 'model/DAOGeneral.php');
 
 class LogInQuerys {
     //////
-    function booleanQuery($query) {
+    function booleanQuery($username, $email, $password) {
+        //////
+        $hashEmail = md5(strtolower(trim($email)));
+        $selectedAvatar = "https://avatars.dicebear.com/v2/jdenticon/" . $hashEmail . ".svg";
+        //////
+        $query = "INSERT INTO users (username, email, password, registerDate, avatar, type) 
+                    VALUES ('$username', '$email', '" . password_hash($password, PASSWORD_DEFAULT) . "', '". date("Y/m/d") . "', '$selectedAvatar', 'client')";
         //////
         $result = DAOGeneral::query($query);
         //////
@@ -14,6 +20,23 @@ class LogInQuerys {
         // end_if
     }// end_booleanQuery
     //////
+
+    function checkKeys($username, $email) {
+        //////
+        $values = false;
+        $queryUser = DAOGeneral::query('SELECT username FROM users WHERE username = "' . $username . '"');
+        $queryEmail = DAOGeneral::query('SELECT email FROM users WHERE email = "' . $email . '"');
+        //////
+        if (mysqli_num_rows($queryUser['query']) > 0) {
+            $values = true;
+        }// end_if
+        //////
+        if (mysqli_num_rows($queryEmail['query']) > 0) {
+            $values = true;
+        }//end_if
+        //////
+        return $values;
+    }// end_checkKeys
 
     function singleQuery($query) {
         //////

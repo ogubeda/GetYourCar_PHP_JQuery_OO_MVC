@@ -41,6 +41,8 @@ function requestLogIn(user) {
         window.location.href = "index.php?page=home&op=list";
     }).catch(function(error) {
         console.log(error);
+        $('#error').remove();
+        $('<span></span>').attr({'id': 'error', 'style': 'position: relative; float: right', 'class': 'error'}).html('Invalid username/password').appendTo('#top-form');
     });// end_promise
 }// end_requestLogIn
 
@@ -78,6 +80,7 @@ function checkRegister() {
     var error = false;
     //////
     $('.error').remove();
+    $('#error-duplicated').remove();
     for (row in results) {
         if (results[row] == false) {
             error = true;
@@ -104,6 +107,8 @@ function checkRegister() {
                 console.log(error.responseText);
                 console.log('Fail when trying to register.');
             });// end_fail
+            $('#error-duplicated').remove();
+            $('<span></span>').attr({'id': 'error-duplicated', 'style': 'position: relative; float: right', 'class': 'error'}).html('Username or email in use.').appendTo('#input-username');
         }// end_if
     });
 }// end_checkRegister
@@ -140,7 +145,7 @@ function regExData(user) {
         if (row == 'email') {
             regEx = /^[A-Za-z0-9._-]{5,20}@[a-z]{3,6}.[a-z]{2,4}$/;
         }else if (row == 'username') {
-            regEx = /^[A-Za-z._-]{5,15}$/;
+            regEx = /^[A-Za-z0-9._-]{5,15}$/;
         }else {
             regEx = /^[A-Za-z0-9._-]{5,20}$/;
         }// end_else

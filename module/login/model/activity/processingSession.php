@@ -3,10 +3,10 @@
 function updateSession($force = false) {
     //////
     if ((!isset($_SESSION['address'])) || ($force)) {
-        $_SESSION['address']  = $_SERVER['REMOTE_ADDR'];
+        $_SESSION['address']  = md5($_SERVER['REMOTE_ADDR']);
     }//end if
     if ((!isset($_SESSION['agent'])) || ($force)) {
-        $_SESSION['agent'] = $_SERVER['userAgent'];
+        $_SESSION['agent'] = md5($_SERVER['userAgent']);
     }// end_if
     //////
     $oldID = session_id();
@@ -17,6 +17,7 @@ function updateSession($force = false) {
     //////
     session_id($updatedSession);
     session_start();
+    ini_set('session.use_only_cookies', true);
     $_SESSION['time'] = time();
     $_SESSION['old'] = $oldID;
 }// end_updateSession
@@ -33,10 +34,10 @@ function loadSession($username, $type, $avatar) {
 function checkSession() {
     //////
     try {
-        if ($_SESSION['address'] != $_SERVER['REMOTE_ADDR']) {
+        if ($_SESSION['address'] != md5($_SERVER['REMOTE_ADDR'])) {
             throw new Exception("The IP Addresses aren't the same.");
         }// end_if
-        if ($_SESSION['agent'] != $_SERVER['userAgent']) {
+        if ($_SESSION['agent'] != md5($_SERVER['userAgent'])) {
             throw new Exception("The Browsers between session aren't the same.");
         }// end_if
         if ($_SESSION['old'] == session_id()) {
