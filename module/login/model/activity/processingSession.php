@@ -49,8 +49,11 @@ function checkSession() {
         if (md5($_SESSION['type']) != $_SESSION['epyt']) {
             throw new Exception("The type of the user missmatch.");
         }// end_if
-        if (md5($_SESSION['username']) != $_SESSION['resu']) {
+        if (md5($_SESSION['user']) != $_SESSION['resu']) {
             throw new Exception("The usernames missmatch.");
+        }//
+        if (md5(session_id()) != $_POST['secureSession']) {
+            throw new Exception("Session id missmatch.");
         }
         return true;
     }catch(Exception $e) {
@@ -62,11 +65,8 @@ function returnUserSession() {
     //////
     if ($_SESSION['user'] && (checkSession())) {
         updateSession();
-        return json_encode(array('user' => $_SESSION['user'], 'type' => $_SESSION['type'], 'avatar' => $_SESSION['avatar']));
+        return json_encode(array('user' => $_SESSION['user'], 'type' => $_SESSION['type'], 'avatar' => $_SESSION['avatar'], 'secureSession' => md5(session_id())));
     }else {
-        session_start();
-        session_destroy();
-        session_unset();
         return 'Something has ocurred.';
     }// end_else
 }// end_returnUserSession

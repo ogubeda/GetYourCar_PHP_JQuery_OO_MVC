@@ -19,7 +19,7 @@ function loadMenu() {
     $('<li></li>').html('<a href="index.php?page=services" class = "menu-btn" id = "services" data-tr="Services"></a>').appendTo('#fixed-menu');
     $('<li></li>').html('<a href="index.php?page=contact&op=list" class = "menu-btn" id = "contact" data-tr="Contact Us"></a>').appendTo('#fixed-menu');
     //////
-    ajaxPromise('module/login/controller/controllerLogIn.php?op=returnSession', 'POST', 'JSON')
+    ajaxPromise('module/login/controller/controllerLogIn.php?op=returnSession', 'POST', 'JSON', {secureSession: localStorage.getItem('secureSession')})
     .then(function(data) {
         $('<li></li>').html('<a class = "menu-btn" id = "profile-btn" style = "background : url(' + data.avatar + ') no-repeat; padding-left: 30px; margin-left: 15px">' + 
                             '<span style= "float: left;">' + data.user + '</span></a>').attr({'class': 'item-sideNav', 'id': 'profile-submenu'}).appendTo('#fixed-menu');
@@ -34,6 +34,7 @@ function loadMenu() {
         //////
         addActivity();
         logOutClick();
+        localStorage.setItem('secureSession', data.secureSession);
     }).catch(function() {
         $('<li></li>').html('<a href = "index.php?page=log-in&op=list" class = "menu-btn" id = "logIn">Log In</a>').appendTo('#fixed-menu');
     }).then(function() {
@@ -88,6 +89,7 @@ function logOut() {
         dataType: 'JSON'
     }).done(function() {
         console.log('Session closed.');
+        localStorage.removeItem('secureSession');
         window.location.href = "index.php?page=home&op=list";
     }).fail(function() {
         console.log('Something has occured');

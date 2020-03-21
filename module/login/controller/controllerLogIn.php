@@ -32,7 +32,7 @@ switch ($_GET['op']) {
         $getUserData = $querys -> singleQuery("SELECT * FROM users WHERE username = '$_POST[username]'");
         if (!empty($getUserData)) {
             loadSession($getUserData['username'], $getUserData['type'], $getUserData['avatar']);
-            echo json_encode('Log In Successfull');
+            echo json_encode(md5(session_id()));
         }else {
             echo "error";
         }// end_else

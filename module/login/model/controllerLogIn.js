@@ -37,7 +37,7 @@ function checkLogIn() {
 function requestLogIn(user) {
     //////
     ajaxPromise('module/login/controller/controllerLogIn.php?op=logIn', 'POST', 'JSON', user).then(function(data) {
-        console.log(data);
+        localStorage.setItem('secureSession', data);
         window.location.href = "index.php?page=home&op=list";
     }).catch(function(error) {
         console.log(error);
