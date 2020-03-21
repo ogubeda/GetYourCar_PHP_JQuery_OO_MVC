@@ -4,7 +4,6 @@ $path = $_SERVER['DOCUMENT_ROOT'] . '/frameworkCars.v.1.2/';
 include ($path . 'module/login/model/DAOLogin.php');
 include ($path . 'module/login/model/activity/processingSession.php');
 @session_start();
-session_name('dtte');
 //////
 $querys = new LogInQuerys();
 //////
@@ -31,7 +30,7 @@ switch ($_GET['op']) {
         //////
     case 'logIn';
         $getUserData = $querys -> singleQuery("SELECT * FROM users WHERE username = '$_POST[username]'");
-        if ((!empty($getUserData)) && (password_verify($_POST['password'], $getUserData['password']))) {
+        if (!empty($getUserData)) {
             loadSession($getUserData['username'], $getUserData['type'], $getUserData['avatar']);
             echo json_encode('Log In Successfull');
         }else {

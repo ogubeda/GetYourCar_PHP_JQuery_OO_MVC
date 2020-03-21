@@ -45,6 +45,9 @@ class LogInQuerys {
         //////
         if (mysqli_num_rows($result['query']) > 0) {
             $values = mysqli_fetch_assoc($result['query']);
+            if (!password_verify($_POST['password'], $values['password'])) {
+                $values = "";
+            }// end_if
         }// end_if
         //////
         return $values;

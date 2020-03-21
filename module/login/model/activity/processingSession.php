@@ -29,10 +29,13 @@ function loadSession($username, $type, $avatar) {
     $_SESSION['user'] = $username;
     $_SESSION['type'] = $type;
     $_SESSION['avatar'] = $avatar;
+    $_SESSION['epyt'] = md5($type);
+    $_SESSION['resu'] = md5($username);
 }// end_loadSession
 
 function checkSession() {
     //////
+    $query = new LogInQuerys();
     try {
         if ($_SESSION['address'] != md5($_SERVER['REMOTE_ADDR'])) {
             throw new Exception("The IP Addresses aren't the same.");
@@ -43,6 +46,12 @@ function checkSession() {
         if ($_SESSION['old'] == session_id()) {
             throw new Exception("You're using an old ID");
         }// end_if
+        if (md5($_SESSION['type']) != $_SESSION['epyt']) {
+            throw new Exception("The type of the user missmatch.");
+        }// end_if
+        if (md5($_SESSION['username']) != $_SESSION['resu']) {
+            throw new Exception("The usernames missmatch.");
+        }
         return true;
     }catch(Exception $e) {
         return false;
@@ -55,6 +64,9 @@ function returnUserSession() {
         updateSession();
         return json_encode(array('user' => $_SESSION['user'], 'type' => $_SESSION['type'], 'avatar' => $_SESSION['avatar']));
     }else {
+        session_start();
+        session_destroy();
+        session_unset();
         return 'Something has ocurred.';
     }// end_else
 }// end_returnUserSession
