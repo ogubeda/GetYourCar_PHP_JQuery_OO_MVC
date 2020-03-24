@@ -3,8 +3,11 @@
 $path = $_SERVER['DOCUMENT_ROOT'] . '/frameworkCars.v.1.2/';
 //////
 include ($path . 'module/shop/model/DAOShop.php');
+include ($path . 'module/shop/model/DAOFav.php');
 //////
 $querys = new QuerysShop();
+$querysFav = new QuerysFav();
+session_start();
 switch ($_GET['op']) {
     case 'list';
         include ('module/shop/view/list.html');
@@ -77,6 +80,20 @@ switch ($_GET['op']) {
         //////
         if (!empty($countProd)) {
             echo json_encode($countProd);
+        }else {
+            echo 'error';
+        }// end_else
+        break;
+        //////
+    case 'sendFavs';
+        break;
+        //////
+    case 'updateFavs';
+        $check = $querysFav -> checkCar($_POST['carPlate']);
+        $result = $querysFav -> processFav($_POST['carPlate'], $check);
+        //////
+        if ($result['resolve']) {
+            echo json_encode($result['func']);
         }else {
             echo 'error';
         }// end_else

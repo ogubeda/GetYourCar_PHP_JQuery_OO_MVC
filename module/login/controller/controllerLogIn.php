@@ -44,6 +44,7 @@ switch ($_GET['op']) {
         //////
     case 'logOut';
         if (session_destroy()) {
+            session_unset();
             echo json_encode('Done');
         }else {
             echo 'Error';

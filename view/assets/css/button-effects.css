@@ -82,3 +82,22 @@
     -o-animation: slideInDown 1s;
     animation: slideInDown 1s;
 }
+#fav-btn {
+    width: 20%;
+    height: 20%;
+}
+#fav-btn path {
+    stroke-width: 15;
+    stroke: #FFF;
+    stroke-dasharray: 1560;
+    stroke-dashoffset: 0;
+}
+#fav-btn path:hover {
+    animation: animate-fav-btn 0.5s linear forwards;
+}
+.normal-fav-btn path {
+    fill: transparent;
+}
+.active-fav-btn path {
+    fill: #FFF;
+}

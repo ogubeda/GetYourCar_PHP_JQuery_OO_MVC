@@ -12,18 +12,25 @@ function loadShop(modal = false, itemsPage = 12, totalItems = 0) {
         var url = 'module/shop/controller/controllerShop.php?op=sendInfo';
     }// end_else
     //////
-    $.ajax({
-        url: url,
-        type: 'POST',
-        dataType: 'JSON',
-        data: {itemsPage: itemsPage, totalItems: totalItems}
-    }).done(function(data) {
+    ajaxPromise(url, 'POST', 'JSON', {itemsPage: itemsPage, totalItems: totalItems})
+    .then(function (data) {
         $('.container-shop').empty();
         $('#container-shop-gmaps').empty();
         for (row in data) {
             brand = data[row].brand.replace(/ /g, "_");
             $('<div></div>').attr({'id': data[row].carPlate, 'class':'card-shop show-details-btn fadeInAnimation', 'name': data[row].carPlate}).appendTo('.container-shop');
-            $('<div></div>').attr({'class':'inner'}).html('<h4 style = "padding-top: 25px">' + data[row].brand + " " + data[row].model + '</h4>').appendTo('#' + data[row].carPlate);
+            $('<div></div>').attr({'class':'inner'}).html('<h4 style = "padding-top: 25px">' + data[row].brand + " " + data[row].model + '</h4>' +
+                                                            '<div id= "fav-btn" class = "normal-fav-btn"><svg viewBox="-5 -28 522.00002 512" xmlns="http://www.w3.org/2000/svg">' + 
+                                                            '<path d="m471.382812 44.578125c-26.503906-28.746094-62.871093-44.578125-102.410156-44.578125-29.554687 ' +
+                                                             '0-56.621094 9.34375-80.449218 27.769531-12.023438 9.300781-22.917969 20.679688-32.523438 ' + 
+                                                             '33.960938-9.601562-13.277344-20.5-24.660157-32.527344-33.960938-23.824218-18.425781-50.890625-27.769531-80.445312-27.769531-39.539063 ' + 
+                                                             '0-75.910156 15.832031-102.414063 44.578125-26.1875 28.410156-40.613281 67.222656-40.613281 ' + 
+                                                             '109.292969 0 43.300781 16.136719 82.9375 50.78125 124.742187 30.992188 37.394531 75.535156 ' + 
+                                                             '75.355469 127.117188 119.3125 17.613281 15.011719 37.578124 32.027344 58.308593 50.152344 5.476563 ' + 
+                                                             '4.796875 12.503907 7.4375 19.792969 7.4375 7.285156 0 14.316406-2.640625 19.785156-7.429687 ' + 
+                                                             '20.730469-18.128907 40.707032-35.152344 58.328125-50.171876 51.574219-43.949218 96.117188-81.90625 ' + 
+                                                             '127.109375-119.304687 34.644532-41.800781 50.777344-81.4375 50.777344-124.742187 ' + 
+                                                             '0-42.066407-14.425781-80.878907-40.617188-109.289063zm0 0"/></svg></div>').appendTo('#' + data[row].carPlate);
             //////
             if (modal == true) {
                 $('<div></div>').attr({'name': data[row].carPlate, 'id': data[row].carPlate + '-modal', 'class':'card-shop-modal  show-details-btn fadeInAnimation'}).appendTo('#container-shop-gmaps');
@@ -35,11 +42,13 @@ function loadShop(modal = false, itemsPage = 12, totalItems = 0) {
             $('#main-shop').css({'height' : ($('.container-shop').height() + 65)})
         }else {
             $('#main-shop').css({'height': ($('.container-filter').height() + 100)})
-        }
-    }).fail(function() {
+        }// end_else
+    }).then(function() {
+        detectFav();
+    }).catch(function() {
         localStorage.removeItem('filters');
         location.reload();
-    });// end_ajax
+    });// end_catch
 }// end_loadShop
 //////
 
@@ -196,11 +205,12 @@ function showDetails() {
 
 function redirectDetails() {
     //////
-    $(document).on("click", ".show-details-btn" ,function(){
-        console.log(this.getAttribute('name'));
-        localStorage.setItem('currentPage', 'shop-details');
-        localStorage.setItem('carPlate', this.getAttribute('name'))
-        location.reload();
+    $('.container-shop').on("click", ".show-details-btn .inner" ,function(event) {
+        if (!$(event.target).is('path')) {
+            localStorage.setItem('currentPage', 'shop-details');
+            localStorage.setItem('carPlate', $(this).parent().attr('name'))
+            location.reload();
+        }// end_if
     });
 }// end_redirectDetails
 //////
