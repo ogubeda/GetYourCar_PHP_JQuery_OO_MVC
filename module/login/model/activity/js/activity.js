@@ -24,7 +24,7 @@ function reloadSession() {
         type: 'POST',
         dataType: 'JSON'
     }).done(function(data) {
-        console.log(data);
+        localStorage.setItem('secureSession', data);
     }).fail(function(f) {
         console.log(f.responseText);
     })

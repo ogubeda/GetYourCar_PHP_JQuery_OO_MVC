@@ -86,6 +86,13 @@ switch ($_GET['op']) {
         break;
         //////
     case 'sendFavs';
+        $favs = $querysFav -> selectFavs();
+        //////
+        if (!empty($favs['resolve'])) {
+            echo json_encode($favs['resolve']);
+        }else {
+            echo 'error';
+        }// end_else
         break;
         //////
     case 'updateFavs';

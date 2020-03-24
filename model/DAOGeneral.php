@@ -37,9 +37,9 @@ class DAOGeneral {
         $query = DAOGeneral::query($values);
         $rowsValue = array();
         //////
-        if (mysqli_num_rows($query) > 0) {
-            while ($row = mysqli_fetch_assoc($query)) {
-                $rowsValue = $row;
+        if (mysqli_num_rows($query['query']) > 0) {
+            while ($row = mysqli_fetch_assoc($query['query'])) {
+                $rowsValue[] = $row;
             }// end_while
             $query['resolve'] = $rowsValue;
         }// end_if

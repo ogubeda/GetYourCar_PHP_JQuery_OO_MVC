@@ -24,9 +24,21 @@ class QuerysFav {
             $funcFav = false;
         }// end_if
         //////
-        $query = DAOGeneral::booleanQuery($typedQuery);
+        if (isset($_SESSION['user'])) {
+            $query = DAOGeneral::booleanQuery($typedQuery);
+        }// end_if
         $query['func'] = $funcFav;
         //////
         return $query;
     }// end_processFav
+    //////
+
+    function selectFavs() {
+        //////
+        $typedQuery = "SELECT * FROM userFav WHERE username = '$_SESSION[user]'";
+        //////
+        $query = DAOGeneral::multipleQuery($typedQuery);
+        //////
+        return $query;
+    }// end_selectFavs
 }// end_QuerysFav

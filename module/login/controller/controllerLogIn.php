@@ -44,7 +44,8 @@ switch ($_GET['op']) {
         //////
     case 'logOut';
         if (session_destroy()) {
-            session_unset();
+            unset($_SESSION['user']);
+            unset($_SESSION['type']);
             echo json_encode('Done');
         }else {
             echo 'Error';
@@ -52,11 +53,8 @@ switch ($_GET['op']) {
         break;
         //////
     case 'reload';
-        if (updateSession(true)) {
-            echo json_encode('Updated.');
-        }else {
-            echo 'Something has ocurred';
-        }// end_else
+        updateSession(true);
+        echo json_encode(md5(session_id()));
         break;
         //////
     default;

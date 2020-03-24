@@ -19,7 +19,7 @@ function loadShop(modal = false, itemsPage = 12, totalItems = 0) {
         for (row in data) {
             brand = data[row].brand.replace(/ /g, "_");
             $('<div></div>').attr({'id': data[row].carPlate, 'class':'card-shop show-details-btn fadeInAnimation', 'name': data[row].carPlate}).appendTo('.container-shop');
-            $('<div></div>').attr({'class':'inner'}).html('<h4 style = "padding-top: 25px">' + data[row].brand + " " + data[row].model + '</h4>' +
+            $('<div></div>').attr({'class':'inner'}).html('<h4 style = "padding-top: 25px; margin-bottom: 70px">' + data[row].brand + " " + data[row].model + '</h4>' +
                                                             '<div id= "fav-btn" class = "normal-fav-btn"><svg viewBox="-5 -28 522.00002 512" xmlns="http://www.w3.org/2000/svg">' + 
                                                             '<path d="m471.382812 44.578125c-26.503906-28.746094-62.871093-44.578125-102.410156-44.578125-29.554687 ' +
                                                              '0-56.621094 9.34375-80.449218 27.769531-12.023438 9.300781-22.917969 20.679688-32.523438 ' + 
@@ -43,6 +43,8 @@ function loadShop(modal = false, itemsPage = 12, totalItems = 0) {
         }else {
             $('#main-shop').css({'height': ($('.container-filter').height() + 100)})
         }// end_else
+    }).then(function() {
+        sendFavs();
     }).then(function() {
         detectFav();
     }).catch(function() {
@@ -206,7 +208,7 @@ function showDetails() {
 function redirectDetails() {
     //////
     $('.container-shop').on("click", ".show-details-btn .inner" ,function(event) {
-        if (!$(event.target).is('path')) {
+        if (!$(event.target).is('#fav-btn, svg, path')) {
             localStorage.setItem('currentPage', 'shop-details');
             localStorage.setItem('carPlate', $(this).parent().attr('name'))
             location.reload();
