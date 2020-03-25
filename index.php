@@ -1,4 +1,5 @@
 <?php
+    session_start();
 	if ((isset($_GET['page'])) && ($_GET['page'] === "our-cars")){
 		include("view/inc/topPageCars.html");
 	}else if ((isset($_GET['page'])) && ($_GET['page'] === "user-order")){
@@ -11,10 +12,11 @@
         include ('view/inc/topPageLogIn.html');
     }else if ((isset($_GET['page']) && ($_GET['page'] === 'our-brands'))) {
         include ('view/inc/topPageBrands.html');
+    }else if ($_GET['page'] === 'profile') {
+        include ('view/inc/topPageFav.html');
 	}else {
-		include("view/inc/topPage.html");
+		include("view/inc/topPageHome.html");
 	}
-	session_start();
 ?>
 <body>
     <div class="preloader">

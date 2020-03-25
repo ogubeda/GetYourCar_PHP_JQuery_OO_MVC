@@ -10,9 +10,9 @@ function detectFav() {
             }else {
                 thisBtn.removeClass('active-fav-btn');
             }// end_else
-        }).catch(function(error) {
-            console.log(error);
-        })
+        }).catch(function() {
+            window.location.href = "index.php?page=log-in&op=list";
+        }); // end_ajaxPromise
     });
 }// end_detectFav
 //////
@@ -26,5 +26,5 @@ function sendFavs() {
         }// end_for
     }).catch(function(error) {
         console.log(error);
-    });
+    }); // end_sendFavs
 }// end_sendFavs

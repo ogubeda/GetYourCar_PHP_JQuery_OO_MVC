@@ -24,7 +24,8 @@ function loadMenu() {
         $('<li></li>').html('<a class = "menu-btn" id = "profile-btn" style = "background : url(' + data.avatar + ') no-repeat; padding-left: 30px; margin-left: 15px">' + 
                             '<span style= "float: left;">' + data.user + '</span></a>').attr({'class': 'item-sideNav', 'id': 'profile-submenu'}).appendTo('#fixed-menu');
         //////
-        $('<ul></ul>').attr({'class': 'sub-menu'}).html('<li><a id = "log-out-btn">Log Out</a></li>').appendTo('#profile-submenu');
+        $('<ul></ul>').attr({'class': 'sub-menu'}).html('<li><a href = "index.php?page=profile&op=list" id = "profile">Profile</a></li>' + 
+                                                        '<li><a id = "log-out-btn">Log Out</a></li>').appendTo('#profile-submenu');
         //////
         if (data.type === 'admin') {
             adminMenu();

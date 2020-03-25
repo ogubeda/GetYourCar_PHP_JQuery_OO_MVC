@@ -1,7 +1,7 @@
 <?php
 //////
 $path = $_SERVER['DOCUMENT_ROOT'] . '/frameworkCars.v.1.2/';
-include($path . "model/DAOGeneral.php");
+include ($path . "model/DAOGeneral.php");
 class Querys {
     //////
     function select() {
@@ -10,8 +10,8 @@ class Querys {
         $res = DAOGeneral::query($select);
         $arrCarPlates = array();
         //////
-        if (mysqli_num_rows($res) > 0) {
-            while ($row = mysqli_fetch_assoc($res)) {
+        if (mysqli_num_rows($res['query']) > 0) {
+            while ($row = mysqli_fetch_assoc($res['query'])) {
                 $arrCarPlates[] = $row;
             }// end_while
         }// end_if
@@ -26,8 +26,8 @@ class Querys {
         $res = DAOGeneral::query($select);
         $car = array();
         //////
-        if (mysqli_num_rows($res) > 0) {
-            $car = mysqli_fetch_assoc($res);
+        if (mysqli_num_rows($res['query']) > 0) {
+            $car = mysqli_fetch_assoc($res['query']);
         }// end_if
         return $car;
     }// end_selectOne

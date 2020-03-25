@@ -25,7 +25,7 @@ class DAOGeneral {
         $query = DAOGeneral::query($values);
         //////
         if (mysqli_num_rows($query['query']) > 0) {
-            $query['resolve'] = mysqli_fetch_assoc($query);
+            $query['resolve'] = mysqli_fetch_assoc($query['query']);
         }// end_if
         //////
         return $query;
