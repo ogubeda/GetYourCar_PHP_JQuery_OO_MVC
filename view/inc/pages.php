@@ -40,12 +40,11 @@ switch ($_GET['page']) {
 		include ("module/login/controller/controllerLogIn.php");
 		break;
 	case 'profile';
-		include ("module/profile/controller/controllerProfile.php");
-		// if (isset($_SESSION['user'])) {
-		// 	include ("module/profile/controller/controllerProfile.php");
-		// }else {
-		// 	include ("view/inc/error404.html");
-		// }// end_else
+		if (isset($_SESSION['user'])) {
+			include ("module/profile/controller/controllerProfile.php");
+		}else {
+			include ("view/inc/error404.html");
+		}// end_else
 		break;
 	case "error404";
 		include ("view/inc/" . $_GET['page'] . ".html");

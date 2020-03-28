@@ -7,7 +7,7 @@ class DAOProfile {
     //////
     function selectFavs($username) {
         //////
-        $typedQuery = "SELECT * FROM allCars a INNER JOIN userFav u ON a.carPlate = u.carPlate WHERE u.username = '$username'";
+        $typedQuery = "SELECT a.carPlate, a.brand, a.model, a.image FROM allCars a INNER JOIN userFav u ON a.carPlate = u.carPlate WHERE u.username = '$username'";
         $query = DAOGeneral::multipleQuery($typedQuery);
         //////
         return $query;
@@ -16,9 +16,9 @@ class DAOProfile {
 
     function selectUser($username) {
         //////
-        $typedQuery = "SELECT username, email, registerDate FROM users WHERE username = '$username'";
+        $typedQuery = "SELECT username, email, registerDate, avatar FROM users WHERE username = '$username'";
         $query = DAOGeneral::singleQuery($typedQuery);
         //////
         return $query;
-    }
+    }// end_selectUser
 }// end_DAOProfile

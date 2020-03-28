@@ -35,7 +35,6 @@ function loadSession($username, $type, $avatar) {
 
 function checkSession() {
     //////
-    $query = new LogInQuerys();
     try {
         if ($_SESSION['address'] != md5($_SERVER['REMOTE_ADDR'])) {
             throw new Exception("The IP Addresses aren't the same.");

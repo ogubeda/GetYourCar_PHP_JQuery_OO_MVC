@@ -19,6 +19,18 @@ switch ($_GET['op']) {
         }else {
             echo $data['desc'];
         }// end_else
+        break;
+        //////
+    case 'sendUserFavs';
+        $data = $querys -> selectFavs($_SESSION['user']);
+        //////
+        if (!empty($data['resolve'])) {
+            echo json_encode($data['resolve']);
+        }else {
+            echo $data['desc'];
+        }// end_else
+        break;
+        //////
     default;
         include ("view/inc/error404.html");
         break;
