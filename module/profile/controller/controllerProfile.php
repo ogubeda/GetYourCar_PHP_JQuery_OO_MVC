@@ -31,6 +31,17 @@ switch ($_GET['op']) {
         }// end_else
         break;
         //////
+    case 'deleteProfile';
+        $data = $querys -> deleteUser($_SESSION['user']);
+        //////
+        if ($data['resolve']) {
+            session_destroy();
+            echo json_encode('Done.');
+        }else {
+            echo 'Error';
+        }// end_else
+        break;
+        //////
     default;
         include ("view/inc/error404.html");
         break;

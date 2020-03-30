@@ -21,4 +21,14 @@ class DAOProfile {
         //////
         return $query;
     }// end_selectUser
+    //////
+
+    function deleteUser($username) {
+        //////
+        $typedQuery = "DELETE FROM users WHERE username = '$username'";
+        $query = DAOGeneral::booleanQuery($typedQuery);
+        //////
+        return $query;
+    }// end_deleteUser
+    //////
 }// end_DAOProfile

@@ -13,8 +13,8 @@
     margin-top: 20px;
     padding: 5px;
 }
-#container-fav {
-    max-height: 600px;
+#data-favs {
+    max-height: 550px;
     overflow-y: auto;
 }
 #container-options a {
