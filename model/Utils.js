@@ -65,6 +65,7 @@ function clientMenu() {
 
 function fixedMenu() {
     //////
+    $('<li></li>').html('<a href = "index.php?page=cart&op=list" class = "menu-btn" id = "cart">Cart</a>').appendTo('#fixed-menu');
     $('<li></li>').html('<a class = "menu-btn" id = "more-options">More Options</a>').appendTo('#fixed-menu');
     $('<li></li>').html('<a id = "close-options-sideNav">Close</a>').prependTo('#navbar-menu-side').attr({'style': 'display: block'});
     //////
@@ -78,23 +79,39 @@ function fixedMenu() {
 function logOutClick() {
     //////
     $(document).on('click', '#log-out-btn', function() {
-        logOut();
+        if (localStorage.getItem('cart')) {
+            storeCart().then(function() {
+                localStorage.removeItem('cart');
+                logOut();
+            }).catch(function(error) {
+                console.log(error);
+            });
+        }else {
+            logOut();
+        }// end_else
     });
 }// end_logOutClick
 //////
 
 function logOut() {
-    $.ajax({
-        url: 'module/login/controller/controllerLogIn.php?op=logOut',
-        type: 'POST',
-        dataType: 'JSON'
-    }).done(function() {
-        console.log('Session closed.');
-        localStorage.removeItem('secureSession');
-        window.location.href = "index.php?page=home&op=list";
-    }).fail(function() {
-        console.log('Something has occured');
-    });// end_ajax
+        storeCart()
+        .then(function(){
+            localStorage.removeItem('cart');
+        }).catch(function(){
+            console.log('No cart available');
+        }).then(function() {
+            $.ajax({
+                url: 'module/login/controller/controllerLogIn.php?op=logOut',
+                type: 'POST',
+                dataType: 'JSON'
+            }).done(function() {
+                console.log('Session closed.');
+                localStorage.removeItem('secureSession');
+                window.location.href = "index.php?page=home&op=list";
+            }).fail(function() {
+                console.log('Something has occured');
+            });// end_ajax
+        });
 }// end_logOut
 
 function addActivity() {

@@ -30,7 +30,8 @@ function loadShop(modal = false, itemsPage = 12, totalItems = 0) {
                                                              '4.796875 12.503907 7.4375 19.792969 7.4375 7.285156 0 14.316406-2.640625 19.785156-7.429687 ' + 
                                                              '20.730469-18.128907 40.707032-35.152344 58.328125-50.171876 51.574219-43.949218 96.117188-81.90625 ' + 
                                                              '127.109375-119.304687 34.644532-41.800781 50.777344-81.4375 50.777344-124.742187 ' + 
-                                                             '0-42.066407-14.425781-80.878907-40.617188-109.289063zm0 0"/></svg></div>').appendTo('#' + data[row].carPlate);
+                                                             '0-42.066407-14.425781-80.878907-40.617188-109.289063zm0 0"/></svg></div>' + 
+                                                             '<div id = "cart-btn">Hola</div>').appendTo('#' + data[row].carPlate);
             //////
             if (modal == true) {
                 $('<div></div>').attr({'name': data[row].carPlate, 'id': data[row].carPlate + '-modal', 'class':'card-shop-modal  show-details-btn fadeInAnimation'}).appendTo('#container-shop-gmaps');
@@ -46,7 +47,8 @@ function loadShop(modal = false, itemsPage = 12, totalItems = 0) {
     }).then(function() {
         sendFavs();
     }).then(function() {
-        detectFav();
+        detectFav();// inside view/js/favorites.js
+        addToCart();// inside view/js/controllerCart.js
     }).catch(function() {
         localStorage.removeItem('filters');
         location.reload();
@@ -208,7 +210,7 @@ function showDetails() {
 function redirectDetails() {
     //////
     $('.container-shop').on("click", ".show-details-btn .inner" ,function(event) {
-        if (!$(event.target).is('#fav-btn, svg, path')) {
+        if (!$(event.target).is('#fav-btn, svg, path, #cart-btn')) {
             localStorage.setItem('currentPage', 'shop-details');
             localStorage.setItem('carPlate', $(this).parent().attr('name'))
             location.reload();

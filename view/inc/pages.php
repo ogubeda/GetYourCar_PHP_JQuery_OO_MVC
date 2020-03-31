@@ -46,6 +46,9 @@ switch ($_GET['page']) {
 			include ("view/inc/error404.html");
 		}// end_else
 		break;
+	case 'cart';
+		include ("module/cart/controller/controllerCart.php");
+		break;
 	case "error404";
 		include ("view/inc/" . $_GET['page'] . ".html");
 		break;
