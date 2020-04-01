@@ -47,10 +47,10 @@ class Querys {
         }else {
             $extras = "No";
         }// end_else
-
-        $insertSQL = "INSERT INTO allCars (carPlate, idCon, brand, model, seats, doors, gearShift, typeEngine, cv, maxSpeed, roads, extras, startDate, endDate, views)
+        $price = 100 * ($car['seats'] + $car['doors']);
+        $insertSQL = "INSERT INTO allCars (carPlate, idCon, brand, model, seats, doors, gearShift, typeEngine, cv, maxSpeed, roads, extras, startDate, endDate, views, price)
             VALUES ('$car[carPlate]', '$car[idCon]','$car[brand]', '$car[model]', '$car[seats]', '$car[doors]', '$car[gearShift]', 
-            '$car[typeEngine]','$car[powerCV]', '$car[maxSpeed]', '$roads', '$extras', '$car[startDate]', '$car[endDate]', 0);";
+            '$car[typeEngine]','$car[powerCV]', '$car[maxSpeed]', '$roads', '$extras', '$car[startDate]', '$car[endDate]', 0, $price);";
         if (mysqli_query($connection, $insertSQL)) {
             $done = true;
         }else {
@@ -103,9 +103,10 @@ class Querys {
         }else {
             $extras = "No";
         }// end_else
+        $price = 100 * ($car['seats'] + $car['doors']);
         $updateSQL = "UPDATE allCars SET carPlate = '$car[carPlate]', idCon = '$car[idCon]', brand = '$car[brand]', model = '$car[model]', seats = '$car[seats]', doors = '$car[doors]', 
                 gearShift = '$car[gearShift]', typeEngine = '$car[typeEngine]', cv = '$car[powerCV]', maxSpeed = '$car[maxSpeed]', roads = '$roads',
-                extras = '$extras', startDate = '$car[startDate]', endDate = '$car[endDate]' WHERE carPlate = '$plate'";
+                extras = '$extras', startDate = '$car[startDate]', endDate = '$car[endDate]', price = $price WHERE carPlate = '$plate'";
         if (mysqli_query($connection, $updateSQL)) {
             $done = true;
         }else {

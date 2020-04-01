@@ -14,9 +14,11 @@
         include ('view/inc/topPageBrands.html');
     }else if ($_GET['page'] === 'profile') {
         include ('view/inc/topPageFav.html');
+    }else if ($_GET['page'] === 'cart') {
+        include ('view/inc/topPageCheckOut.html');
 	}else {
-		include("view/inc/topPageHome.html");
-	}
+		include ("view/inc/topPageHome.html");
+	}// end_else
 ?>
 <body>
     <div class="preloader">

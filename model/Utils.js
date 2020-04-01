@@ -79,39 +79,24 @@ function fixedMenu() {
 function logOutClick() {
     //////
     $(document).on('click', '#log-out-btn', function() {
-        if (localStorage.getItem('cart')) {
-            storeCart().then(function() {
-                localStorage.removeItem('cart');
-                logOut();
-            }).catch(function(error) {
-                console.log(error);
-            });
-        }else {
-            logOut();
-        }// end_else
+        logOut();
     });
 }// end_logOutClick
 //////
 
 function logOut() {
-        storeCart()
-        .then(function(){
-            localStorage.removeItem('cart');
-        }).catch(function(){
-            console.log('No cart available');
-        }).then(function() {
-            $.ajax({
-                url: 'module/login/controller/controllerLogIn.php?op=logOut',
-                type: 'POST',
-                dataType: 'JSON'
-            }).done(function() {
-                console.log('Session closed.');
-                localStorage.removeItem('secureSession');
-                window.location.href = "index.php?page=home&op=list";
-            }).fail(function() {
-                console.log('Something has occured');
-            });// end_ajax
-        });
+    localStorage.removeItem('cart');
+    $.ajax({
+        url: 'module/login/controller/controllerLogIn.php?op=logOut',
+        type: 'POST',
+        dataType: 'JSON'
+    }).done(function() {
+        console.log('Session closed.');
+        localStorage.removeItem('secureSession');
+        window.location.href = "index.php?page=home&op=list";
+    }).fail(function() {
+        console.log('Something has occured');
+    });// end_ajax
 }// end_logOut
 
 function addActivity() {

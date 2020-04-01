@@ -66,6 +66,7 @@ function returnUserSession() {
         updateSession();
         return json_encode(array('user' => $_SESSION['user'], 'type' => $_SESSION['type'], 'avatar' => $_SESSION['avatar'], 'secureSession' => md5(session_id())));
     }else {
+        session_destroy();
         return 'Something has ocurred.';
     }// end_else
 }// end_returnUserSession

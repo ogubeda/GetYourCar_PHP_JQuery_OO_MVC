@@ -37,7 +37,11 @@ switch ($_GET['page']) {
 		}// end_else
 		break;
 	case "log-in";
-		include ("module/login/controller/controllerLogIn.php");
+		if (!isset($_SESSION['user'])) {
+			include ("module/login/controller/controllerLogIn.php");
+		}else {
+			include ('view/inc/error404.html');
+		}// end_else
 		break;
 	case 'profile';
 		if (isset($_SESSION['user'])) {

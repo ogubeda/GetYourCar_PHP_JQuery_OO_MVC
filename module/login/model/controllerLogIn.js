@@ -42,11 +42,7 @@ function requestLogIn(user) {
     }).then(function() {
         getCart()
         .then(function(data) {
-            let values = [];
-            for (row in data) {
-                values.push(data[row].carPlate);
-            }// end_for
-            localStorage.setItem('cart', JSON.stringify(values))
+            restoreCart(data);
         }).catch(function(error){
             console.log(error);
         }).then(function() {
