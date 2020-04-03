@@ -11,12 +11,11 @@ switch ($_GET['op']) {
         break;
         //////
     case 'storeCart';
-        
         if (!empty($_POST['carPlate']) && isset($_SESSION['user'])) {
-            $check = $querys -> checkCartVal($carPlate, $username);
+            $check = $querys -> checkCartVal($_POST['carPlate'],$_SESSION['user']);
             if (!$check) {
-                $data = $querys -> saveCart($_POST['carPlate'], $_SESSION['user']);
-            }
+                $data = $querys -> saveCart($_POST['carPlate'], $_POST['days'], $_SESSION['user']);
+            }// end_if
         }// end_if
         //////
         if ($data['resolve']) {
@@ -27,24 +26,44 @@ switch ($_GET['op']) {
         break;
         //////
     case 'getCart';
-        $data = $querys -> getCart($_SESSION['user']);
-        $remove = false;
+        $data = $querys -> getCart($_POST['cart']);
         //////
         if (!empty($data['resolve'])) {
-            //$remove = $querys -> removeCart($_SESSION['user']);
-                echo json_encode($data['resolve']);
-                break;
-        }// end_if
-        echo 'error';
+            echo json_encode($data['resolve']);
+        }else {
+            echo 'error';
+        }// end_else
         break;
         //////
     case 'loadDataCart';
-        $data = $querys -> getCheckOutData($_SESSION['user']);
+        if (isset($_SESSION['user'])) {
+            $data = $querys -> getCheckOutData($_SESSION['user']);
+        }// end_if
         if (!empty($data['resolve'])) {
             echo json_encode($data['resolve']);
         }else {
             echo 'error';
         }// end_if
+        break;
+        //////
+    case 'updateDays';
+        if (isset($_SESSION['user'])) {
+            $data = $querys -> updateDays($_POST['days'], $_POST['carPlate'], $_SESSION['user']);
+        }// end_if
+        if ($data['resolve']) {
+            echo json_encode('Done.');
+        }else {
+            echo 'error';
+        }
+        break;
+        //////
+    case 'checkOut';
+        $data = $querys -> addToPurchase($_SESSION['user']);
+        if ($data['resolve']) {
+            echo json_encode($data);
+        }else {
+            echo 'error';
+        }// end_else
         break;
         //////
     default;

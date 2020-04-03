@@ -85,7 +85,6 @@ function logOutClick() {
 //////
 
 function logOut() {
-    localStorage.removeItem('cart');
     $.ajax({
         url: 'module/login/controller/controllerLogIn.php?op=logOut',
         type: 'POST',

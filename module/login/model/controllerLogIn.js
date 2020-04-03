@@ -40,14 +40,9 @@ function requestLogIn(user) {
     .then(function(data) {
         localStorage.setItem('secureSession', data);
     }).then(function() {
-        getCart()
-        .then(function(data) {
-            restoreCart(data);
-        }).catch(function(error){
-            console.log(error);
-        }).then(function() {
-            window.location.href = "index.php?page=home&op=list";
-        });
+        restoreCart();
+    }).then(function() {
+        window.location.href = "index.php?page=home&op=list";
     }).catch(function(error) {
         console.log(error);
         $('#error').remove();

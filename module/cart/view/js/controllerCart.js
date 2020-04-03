@@ -20,11 +20,14 @@ function cartSys(carPlate) {
 function insertCart(carPlate) {
     //////
     let localCart = [];
+    let objCart = {carPlate: "", days: ""};
     if (localStorage.getItem('cart')) {
         localCart = JSON.parse(localStorage.getItem('cart'));
     }// end_if
-    if (!localCart.includes(carPlate)) {
-        localCart.push(carPlate)
+    if (!localCart.some(e => e.carPlate === carPlate)) {
+        objCart.carPlate = carPlate;
+        objCart.days = 1;
+        localCart.push(objCart)
     }// end_if
     localStorage.setItem('cart', JSON.stringify(localCart));
     //////
@@ -51,28 +54,42 @@ function deleteCart() {
 //////
 
 function getCart() {
-    return ajaxPromise('module/cart/controller/controllerCart.php?op=getCart', 'POST', 'JSON');
+    return ajaxPromise('module/cart/controller/controllerCart.php?op=getCart', 'POST', 'JSON', {cart: JSON.parse(localStorage.getItem('cart'))});
 }// end_getCart
 //////
 
-function storeCart(carPlate) {
+function storeCart(carPlate, days) {
     //////
-    return ajaxPromise('module/cart/controller/controllerCart.php?op=storeCart', 'POST', 'JSON', {carPlate: carPlate});
+    return ajaxPromise('module/cart/controller/controllerCart.php?op=storeCart', 'POST', 'JSON', {carPlate: carPlate, days: days});
 }// end_storeCart
 //////
 
-function restoreCart(dbCart) {
+function restoreCart() {
     //////
     let values = [];
-    let cart = Object.values(dbCart);
     //////
     if (localStorage.getItem('cart')) {
         values = JSON.parse(localStorage.getItem('cart'))
     }// end_if
     for (row in values) {
-        if (!cart.includes(values[row])) {
-            storeCart(values[row]);
-        }// end_if
+        storeCart(values[row].carPlate, values[row].days).then(function() {
+            console.log('Stored.');
+        }).catch(function(error) {
+            console.log(error);
+        });
     }// end_for
     deleteCart();
 }// end_storeCart
+//////
+
+function updateDaysLocal(carPlate, days) {
+    //////
+    let localCart = JSON.parse(localStorage.getItem('cart'));
+    let index = 0;
+    if (localCart.some(e => e.carPlate === carPlate)) {
+        index = localCart.findIndex(obj => obj.carPlate === carPlate);
+        localCart[index].days = days;
+        //////
+        localStorage.setItem('cart', JSON.stringify(localCart));
+    }// end_updateDays
+}// end_updateDays

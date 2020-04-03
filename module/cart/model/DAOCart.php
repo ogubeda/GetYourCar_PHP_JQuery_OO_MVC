@@ -5,18 +5,22 @@ include ($path . 'model/DAOGeneral.php');
 //////
 class DAOCart {
     //////
-    function addToPurchase() {
+    function addToPurchase($username) {
         //////
+        $idPurchase = "$username" . date("Ymdhis");
+        $typedQuery = "INSERT INTO purchases (idpurchases, purchaseDate,carPlate, username, days, price) SELECT '$idPurchase', CURRENT_DATE, c.*, a.price FROM carts c INNER JOIN allCars a ON c.carPlate = a.carPlate WHERE username = '$username'";
+        $deleteCart = "DELETE FROM carts WHERE username = '$username'";
+        $values = DAOGeneral::booleanQuery($typedQuery);
+        if ($values['resolve']) {
+            $delete = DAOGeneral::booleanQuery($deleteCart);
+        }// end_if
+        //////
+        return $values;
     }// end_addToPurchase
     //////
 
-    function removeToPurchase() {
-        //////
-    }// end_removeToPurchase
-    //////
-
-    function saveCart($carPlate, $username) {
-        $typedQuery = "INSERT INTO carts VALUES ('$carPlate', '$username')";
+    function saveCart($carPlate, $days, $username) {
+        $typedQuery = "INSERT INTO carts VALUES ('$carPlate', '$username', $days)";
         $values = DAOGeneral::booleanQuery($typedQuery);
         //////
         return $values;
@@ -24,9 +28,14 @@ class DAOCart {
     }// end_saveCart
     //////
 
-    function getCart($username) {
+    function getCart($cart) {
         //////
-        $typedQuery = "SELECT carPlate FROM carts WHERE username = '$username'";
+        $arrCart = array();
+        foreach($cart as $row) {
+            $arrCart[] = $row['carPlate'];
+        }// end_foreach
+        $strCart = implode("', '" ,$arrCart);
+        $typedQuery = "SELECT * FROM allCars WHERE carPlate IN ('$strCart')";
         $values = DAOGeneral::multipleQuery($typedQuery);
         //////
         return $values;
@@ -60,5 +69,15 @@ class DAOCart {
             return false;
         }//
         return true;
-    }
+    }// end_checkCartVal
+    //////
+
+    function updateDays($days, $carPlate, $username) {
+        //////
+        $typedQuery = "UPDATE carts SET days = $days WHERE carPlate = '$carPlate' AND username = '$username'";
+        $values = DAOGeneral::booleanQuery($typedQuery);
+        //////
+        return $values;
+    }// end_updateDays
+    //////
 }// endDAOCart

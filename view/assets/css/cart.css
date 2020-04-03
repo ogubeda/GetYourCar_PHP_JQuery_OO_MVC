@@ -1,0 +1,10 @@
+#container-details-cart {
+    margin-bottom: 30px;
+}
+#info-cont {
+    font-size: 20px;
+    display: block;
+}
+#info-price {
+    float: right;
+}

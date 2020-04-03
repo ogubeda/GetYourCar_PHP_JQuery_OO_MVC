@@ -52,7 +52,7 @@ class DAOGeneral {
         //////
         $query = DAOGeneral::query($values);
         //////
-        if ($query) {
+        if ($query['query']) {
             $query['resolve'] = true;
         }else {
             $query['resolve'] = false;
