@@ -1,17 +1,41 @@
 function addToCart() {
     //////
-    $(document).on('click', '#cart-btn', function() {
+    $('.card-shop').on('click', '#cart-btn', function() {
+        $(this).addClass('active-cart-btn');
         cartSys($(this).closest('.card-shop').attr('name'));
+    });
+    $('.container-others').on('click', '#cart-btn', function() {
+        cartSys(localStorage.getItem('carPlate'));
     });
 }// end_addToCart
 //////
 
+function paintCart() {
+    //////
+    ajaxPromise('module/cart/controller/controllerCart.php?op=selectCart', 'POST', 'JSON')
+    .then(function(data) {
+        if (data === 'false') {
+            if (localStorage.getItem('cart')) {
+                data = JSON.parse(localStorage.getItem('cart'));
+            }else {
+                return;
+            }// end_else
+        }// end_if
+        for (row in data) {
+            $('#' + data[row].carPlate).find('#cart-btn').addClass('active-cart-btn');
+        }// end_for
+    }).catch(function(error) {
+        console.log(error);
+    });
+}// end_paintCart   
+
 function cartSys(carPlate) {
     //////
-    storeCart(carPlate)
+    storeCart(carPlate, 1)
     .then(function() {
         console.log('Saved.');
-    }).catch(function() {
+    }).catch(function(error) {
+        console.log(error);
         insertCart(carPlate);
     });
 }// end_cartSys
@@ -27,7 +51,7 @@ function insertCart(carPlate) {
     if (!localCart.some(e => e.carPlate === carPlate)) {
         objCart.carPlate = carPlate;
         objCart.days = 1;
-        localCart.push(objCart)
+        localCart.push(objCart);
     }// end_if
     localStorage.setItem('cart', JSON.stringify(localCart));
     //////

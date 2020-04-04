@@ -12,7 +12,7 @@ switch ($_GET['op']) {
         //////
     case 'storeCart';
         if (!empty($_POST['carPlate']) && isset($_SESSION['user'])) {
-            $check = $querys -> checkCartVal($_POST['carPlate'],$_SESSION['user']);
+            $check = $querys -> checkCartVal($_POST['carPlate'], $_SESSION['user']);
             if (!$check) {
                 $data = $querys -> saveCart($_POST['carPlate'], $_POST['days'], $_SESSION['user']);
             }// end_if
@@ -21,7 +21,7 @@ switch ($_GET['op']) {
         if ($data['resolve']) {
             echo json_encode('Done.');
         }else {
-            echo 'Error.';
+            echo $data['desc'];
         }// end_else
         break;
         //////
@@ -58,14 +58,30 @@ switch ($_GET['op']) {
         break;
         //////
     case 'checkOut';
-        $data = $querys -> addToPurchase($_SESSION['user']);
-        if ($data['resolve']) {
-            echo json_encode($data);
+        if (isset($_SESSION['user'])) {
+            $data = $querys -> addToPurchase($_SESSION['user']);
+            if ($data['resolve']) {
+                echo json_encode($data);
+            }else {
+                echo 'error';
+            }// end_else
         }else {
-            echo 'error';
+            echo json_encode(false);
         }// end_else
         break;
         //////
+    case 'selectCart';
+        if (isset($_SESSION['user'])) {
+            $data = $querys -> printCart($_SESSION['user']);
+            if (!empty($data['resolve'])) {
+                echo json_encode($data['resolve']);
+            }else {
+                echo 'error';
+            }// end_else
+        }else {
+            echo json_encode('false');
+        }// end_else
+        break;
     default;
         include ('view/inc/error404.html');
         break;

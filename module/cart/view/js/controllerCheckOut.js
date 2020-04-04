@@ -18,7 +18,10 @@ function checkOutCart() {
     //////
     ajaxPromise('module/cart/controller/controllerCart.php?op=checkOut')
     .then(function(data) {
-        console.log(data);
+        if (data === "false") {
+            localStorage.setItem('purchase', true);
+            window.location.href = 'index.php?page=log-in&op=list';
+        }// end_if
     }).catch(function(error){
         console.log(error);
     });
@@ -68,6 +71,7 @@ function printDataCart(cart, localCart = null) {
     let days = 0;
     $('#container-details-cart').empty();
     $('#price-cart-calc').empty();
+    //$('#container-price-cart').empty();
     //////
     for (row in cart) {
         days = parseFloat(cart[row].days) || parseFloat(localCart[row].days) ||1;

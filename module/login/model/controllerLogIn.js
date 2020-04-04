@@ -42,7 +42,12 @@ function requestLogIn(user) {
     }).then(function() {
         restoreCart();
     }).then(function() {
-        window.location.href = "index.php?page=home&op=list";
+        if (localStorage.getItem('purchase') === "true") {
+            localStorage.removeItem('purchase');
+            window.location.href = "index.php?page=cart&op=list";
+        }else {
+            window.location.href = "index.php?page=home&op=list";
+        }
     }).catch(function(error) {
         console.log(error);
         $('#error').remove();

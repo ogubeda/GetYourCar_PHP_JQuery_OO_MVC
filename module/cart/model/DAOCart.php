@@ -62,7 +62,7 @@ class DAOCart {
 
     function checkCartVal($carPlate, $username) {
         //////
-        $typedQuery = "SELECT * FROM allCars WHERE carPlate = '$carPlate' AND username = '$username'";
+        $typedQuery = "SELECT * FROM carts WHERE carPlate = '$carPlate' AND username = '$username'";
         $values = DAOGeneral::singleQuery($typedQuery);
         //////
         if (empty($values['resolve'])) {
@@ -80,4 +80,12 @@ class DAOCart {
         return $values;
     }// end_updateDays
     //////
+
+    function printCart($username) {
+        //////
+        $typedQuery = "SELECT * FROM carts WHERE username = '$username'";
+        $values = DAOGeneral::multipleQuery($typedQuery);
+        //////
+        return $values;
+    }// end_printCart
 }// endDAOCart
