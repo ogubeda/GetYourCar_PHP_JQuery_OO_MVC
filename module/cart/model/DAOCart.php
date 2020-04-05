@@ -42,7 +42,15 @@ class DAOCart {
     }// end_getCart
     //////
 
-    function removeCart($username) {
+    function removeCart($carPlate, $username) {
+        //////
+        $typedQuery = "DELETE FROM carts WHERE carPlate = '$carPlate' AND username = '$username'";
+        $values = DAOGeneral::booleanQuery($typedQuery);
+        //////
+        return $values;
+    }// end_removeCart
+
+    function deleteCart($username) {
         //////
         $typedQuery = "DELETE FROM carts WHERE username = '$username'";
         $values = DAOGeneral::booleanQuery($typedQuery);

@@ -35,6 +35,19 @@ switch ($_GET['op']) {
         }// end_else
         break;
         //////
+    case 'removeCart';
+        if (isset($_SESSION['user'])) {
+            $data = $querys -> removeCart($_POST['carPlate'], $_SESSION['user']);
+            if ($data['resolve']) {
+                echo json_encode(true);
+            }else {
+                echo $data['desc'];
+            }// end_else
+        }else {
+            echo json_encode(false);
+        }// end_else
+        break;
+        //////
     case 'loadDataCart';
         if (isset($_SESSION['user'])) {
             $data = $querys -> getCheckOutData($_SESSION['user']);

@@ -43,11 +43,9 @@ function cartSys(carPlate) {
 
 function insertCart(carPlate) {
     //////
-    let localCart = [];
+    let localCart = JSON.parse(localStorage.getItem('cart')) || [];
     let objCart = {carPlate: "", days: ""};
-    if (localStorage.getItem('cart')) {
-        localCart = JSON.parse(localStorage.getItem('cart'));
-    }// end_if
+    //////
     if (!localCart.some(e => e.carPlate === carPlate)) {
         objCart.carPlate = carPlate;
         objCart.days = 1;
@@ -57,11 +55,24 @@ function insertCart(carPlate) {
     //////
 }// end_insertCart
 
-function removeCart(cart, carPlate) {
+function removeDBCart(carPlate) {
     //////
-    let position = cart.indexOf(carPlate);
-    cart.splice(position, 1);
-    ///////
+    return ajaxPromise('module/cart/controller/controllerCart.php?op=removeCart', 'POST', 'JSON', {carPlate: carPlate});
+}// end_removeDBCart
+//////
+
+function removeCart(carPlate) {
+    //////
+    let cart = JSON.parse(localStorage.getItem('cart'));
+    let pos = 0;
+    for (row in cart) {
+        if (cart[row].carPlate === carPlate) {
+            break;
+        }// end_if
+        pos++;
+    }// end_for
+    //////
+    cart.splice(pos, 1);
     if ($(cart).size() <= 0) {
         deleteCart();
         return;
@@ -90,11 +101,8 @@ function storeCart(carPlate, days) {
 
 function restoreCart() {
     //////
-    let values = [];
+    let values = JSON.parse(localStorage.getItem('cart')) || [];
     //////
-    if (localStorage.getItem('cart')) {
-        values = JSON.parse(localStorage.getItem('cart'))
-    }// end_if
     for (row in values) {
         storeCart(values[row].carPlate, values[row].days).then(function() {
             console.log('Stored.');

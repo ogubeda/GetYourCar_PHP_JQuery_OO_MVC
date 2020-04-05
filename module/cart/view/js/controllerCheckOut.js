@@ -11,6 +11,21 @@ function addCartEvents() {
     $(document).on('click', '#checkout-btn', function() {
         checkOutCart();
     });
+    $(document).on('click', '#delete-btn', function() {
+        const thisBtn = $(this);
+        removeDBCart(thisBtn.closest('.product-element').attr('id'))
+        .then(function(data) {
+            if (data === false) {
+                if (localStorage.getItem('cart')) {
+                    removeCart(thisBtn.closest('.product-element').attr('id'));
+                }// end_if
+            }// end_if
+            getDataCart();
+        }).catch(function(error) {
+            console.log(error);
+        });
+        
+    });
 }// end_addCartEvents
 //////
 
@@ -50,12 +65,18 @@ function getDataCart() {
         printDataCart(data);
     }).catch(function(error) {
         if (!localStorage.getItem('cart')) {
+            $('#container-details-cart').empty();
+            $('#price-cart-calc').empty();
+            $('#checkout-btn').remove();
             $('<h3></h3>').attr({'id': 'error-cart-load'}).html('It seems your cart is empty :(').appendTo('#container-details-cart');
         }else {
             getCart()
             .then(function(data) {
                 printDataCart(data, JSON.parse(localStorage.getItem('cart')));
             }).catch(function() {
+                $('#container-details-cart').empty();
+                $('#price-cart-calc').empty();
+                $('#container-price-cart').empty();
                 $('<h3></h3>').attr({'id': 'error-cart-load'}).html('It seems your cart is empty :(').appendTo('#container-details-cart');
             });
         }// end_else
@@ -71,10 +92,10 @@ function printDataCart(cart, localCart = null) {
     let days = 0;
     $('#container-details-cart').empty();
     $('#price-cart-calc').empty();
-    //$('#container-price-cart').empty();
+    $('#checkout-btn').remove();
     //////
     for (row in cart) {
-        days = parseFloat(cart[row].days) || parseFloat(localCart[row].days) ||1;
+        days = parseFloat(cart[row].days) || parseFloat(localCart[row].days) || 1;
         price = parseFloat(cart[row].price) * (1 + (days / 10 - 0.1));
         totalPrice = totalPrice + price;
         //////
@@ -90,10 +111,11 @@ function printDataCart(cart, localCart = null) {
                 return false;
             } }).html(i + 1).appendTo('#select-daysI-' + cart[row].carPlate);
 
-        }
+        }// end_for
+        $('<a></a>').attr({'style': 'margin-left: 15px', 'id': 'delete-btn'}).html('Delete').appendTo('#' + cart[row].carPlate)
         $('<span></span>').attr({'id': 'info-price'}).html(price + '€').appendTo('#' + cart[row].carPlate);
     }
-    $('<span></span>').attr({'id': 'i'}).html(totalPrice).appendTo('#price-cart-calc');
+    $('<span></span>').attr({'id': 'i'}).html(totalPrice + '€').appendTo('#price-cart-calc');
     $('<a></a>').attr({'id': 'checkout-btn'}).html('Check out').appendTo('#container-price-cart');
 }// end_printDataCart
 //////
