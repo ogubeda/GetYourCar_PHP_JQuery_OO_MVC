@@ -11,8 +11,8 @@ class LogInQuerys {
         $hashEmail = md5(strtolower(trim($email)));
         $selectedAvatar = "https://avatars.dicebear.com/v2/jdenticon/" . $hashEmail . ".svg";
         //////
-        $query = "INSERT INTO users (username, email, password, registerDate, avatar, type) 
-                    VALUES ('$username', '$email', '" . password_hash($password, PASSWORD_DEFAULT) . "', '". date("Y/m/d") . "', '$selectedAvatar', 'client')";
+        $query = "INSERT INTO users (username, email, password, registerDate, avatar, type, money) 
+                    VALUES ('$username', '$email', '" . password_hash($password, PASSWORD_DEFAULT) . "', '". date("Y/m/d") . "', '$selectedAvatar', 'client', 10000)";
         //////
         $result = DAOGeneral::query($query);
         //////

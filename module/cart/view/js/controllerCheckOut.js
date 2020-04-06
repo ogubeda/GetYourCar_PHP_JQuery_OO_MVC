@@ -31,7 +31,7 @@ function addCartEvents() {
 
 function checkOutCart() {
     //////
-    ajaxPromise('module/cart/controller/controllerCart.php?op=checkOut')
+    ajaxPromise('module/cart/controller/controllerCart.php?op=checkOut', 'POST', 'JSON')
     .then(function(data) {
         if (data === "false") {
             localStorage.setItem('purchase', true);

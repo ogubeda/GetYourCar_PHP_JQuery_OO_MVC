@@ -7,12 +7,30 @@ class DAOCart {
     //////
     function addToPurchase($username) {
         //////
+        $total = 0;
+        $price = 0;
+        //////
         $idPurchase = "$username" . date("Ymdhis");
+        $checkMoney = "SELECT money FROM users WHERE username = '$username'";
+        $cartValue = "SELECT a.price, c.days FROM allCars a INNER JOIN carts c ON a.carPlate = c.carPlate WHERE username = '$username'";
         $typedQuery = "INSERT INTO purchases (idpurchases, purchaseDate,carPlate, username, days, price) SELECT '$idPurchase', CURRENT_DATE, c.*, a.price FROM carts c INNER JOIN allCars a ON c.carPlate = a.carPlate WHERE username = '$username'";
         $deleteCart = "DELETE FROM carts WHERE username = '$username'";
-        $values = DAOGeneral::booleanQuery($typedQuery);
-        if ($values['resolve']) {
-            $delete = DAOGeneral::booleanQuery($deleteCart);
+        //////
+        $valueMoney = DAOGeneral::singleQuery($checkMoney);
+        $valueCart = DAOGeneral::multipleQuery($cartValue);
+        //////
+        foreach($valueCart['resolve'] as $row) {
+            $price = $row['price'] * (1 + ($row['days'] / 10 - 0.1));
+            $total = $total + $price;
+        }// end_for
+        if ($total <= $valueMoney['resolve']['money']) {
+            $values = DAOGeneral::booleanQuery($typedQuery);
+            if ($values['resolve']) {
+                $credit = $valueMoney['resolve']['money'] - $total;
+                $downMoney = "UPDATE users SET money = $credit WHERE username = '$username'";
+                $done = DAOGeneral::booleanQuery($downMoney);
+                $delete = DAOGeneral::booleanQuery($deleteCart);
+            }// end_if
         }// end_if
         //////
         return $values;

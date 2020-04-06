@@ -8,7 +8,7 @@ function ajaxPromise(sUrl, sType, sTData, sData = undefined) {
         }).done((data) => {
             resolve(data);
         }).fail((jqXHR, textStatus, errorThrow) => {
-            reject(new Error(jqXHR.responseText));
+            reject(jqXHR.responseText);
         }); // end_ajax
     });
 }// end_ajaxPromise
