@@ -20,8 +20,11 @@ function loadShop(modal = false, itemsPage = 12, totalItems = 0) {
             brand = data[row].brand.replace(/ /g, "_");
             $('<div></div>').attr({'id': data[row].carPlate, 'class':'card-shop show-details-btn fadeInAnimation', 'name': data[row].carPlate}).appendTo('.container-shop');
             $('<div></div>').attr({'class':'inner'}).html('<h4 style = "padding-top: 25px; margin-bottom: 70px">' + data[row].brand + " " + data[row].model + '</h4>' +
-                                                            '<div id= "fav-btn" class = "normal-fav-btn">' + favBtn + '</div>' + 
-                                                             '<div id = "cart-btn" style = "margin-top: 25px" class = "normal-cart-btn">' + cartBtn +'</div>').appendTo('#' + data[row].carPlate);
+                                                            '<h5>' + data[row].price + '€</h5>' +
+                                                            '<div id = "container-btns">'+
+                                                            '<div id= "fav-btn" class = "normal-fav-btn" style = "flex: 25px 0 50%; margin-right: 100px">' + favBtn + '</div>' + 
+                                                             '<div id = "cart-btn" class = "normal-cart-btn" style = "flex: 25px 0 50%">' + cartBtn +'</div>' +
+                                                             '</div>').appendTo('#' + data[row].carPlate);
             //////
             if (modal == true) {
                 $('<div></div>').attr({'name': data[row].carPlate, 'id': data[row].carPlate + '-modal', 'class':'card-shop-modal  show-details-btn fadeInAnimation'}).appendTo('#container-shop-gmaps');
@@ -175,7 +178,7 @@ function showDetails() {
         });// end_fail
         //////
         $('.content').empty();
-        $('<div></div>').attr({'class': 'top-details'}).appendTo('.content');
+        $('<div></div>').attr({'class': 'top-details spt',}).appendTo('.content');
         $('<div><div>').attr({'class': 'top-photo'}).appendTo('.top-details');
         $('<div></div>').attr({'class': 'container separe-menu', 'id': 'container-shop-details'}).appendTo('.content');
         $('.top-photo').css({'background': 'url(view/img/allCarsImg/' + data.image + ')', 'background-size': 'cover', 'background-position': 'center'});
@@ -191,10 +194,11 @@ function showDetails() {
         //////
         $('<div></div>').attr({'class': 'container-others'}).appendTo('#container-shop-details');
         $('.container-others').html('<h5>Roads: ' + data.roads + ' Extras: ' + data.extras + ' Start Date: ' + data.startDate + ' End Date: ' + data.endDate + '</h5>' + 
-                                        '<div id= "fav-btn" class = "normal-fav-btn">' + favBtn + '</div>' + 
-                                        '<div id = "cart-btn" style = "margin-top: 25px">' + cartBtn +'</div>');
+                                        '<div id= "fav-btn" class = "normal-fav-btn" style = "width: 75px; height: 75px; cursor: pointer">' + favBtn + '</div>' + 
+                                        '<div id = "cart-btn" class = "normal-cart-btn" style = "margin-top: 25px;width: 75px; height: 75px; cursor: pointer" >' + cartBtn +'</div>');
     }).then(function() {
-        detectFav();// inside view/js/favorites.js
+        detectFav();
+        sendFav();
         addToCart();// inside view/js/controllerCart.js
     }).catch(function() {
         window.location.href = 'index.php?page=error503'

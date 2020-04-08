@@ -38,7 +38,7 @@ switch ($_GET['op']) {
             session_destroy();
             echo json_encode('Done.');
         }else {
-            echo 'Error';
+            echo $data['desc'];
         }// end_else
         break;
         //////

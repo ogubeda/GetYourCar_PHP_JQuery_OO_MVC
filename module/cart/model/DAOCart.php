@@ -13,7 +13,7 @@ class DAOCart {
         $idPurchase = "$username" . date("Ymdhis");
         $checkMoney = "SELECT money FROM users WHERE username = '$username'";
         $cartValue = "SELECT a.price, c.days FROM allCars a INNER JOIN carts c ON a.carPlate = c.carPlate WHERE username = '$username'";
-        $typedQuery = "INSERT INTO purchases (idpurchases, purchaseDate,carPlate, username, days, price) SELECT '$idPurchase', CURRENT_DATE, c.*, a.price FROM carts c INNER JOIN allCars a ON c.carPlate = a.carPlate WHERE username = '$username'";
+        $typedQuery = "INSERT INTO purchases (idpurchases, purchaseDate,carPlate, username, days) SELECT '$idPurchase', CURRENT_DATE, c.* FROM carts c WHERE username = '$username'";
         $deleteCart = "DELETE FROM carts WHERE username = '$username'";
         //////
         $valueMoney = DAOGeneral::singleQuery($checkMoney);

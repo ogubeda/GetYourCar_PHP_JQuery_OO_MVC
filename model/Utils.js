@@ -63,9 +63,9 @@ function clientMenu() {
         .appendTo('#navbar-menu-side');
 }// end_clientMenu
 
-function fixedMenu() {
+function fixedMenu(bagBtn1 = bagBtn) {
     //////
-    $('<li></li>').html('<a href = "index.php?page=cart&op=list" class = "menu-btn" id = "cart">Cart</a>').appendTo('#fixed-menu');
+    $('<li></li>').html('<a href = "index.php?page=cart&op=list" class = "menu-btn" id = "cart">' + bagBtn1 + '</a>').appendTo('#fixed-menu');
     $('<li></li>').html('<a class = "menu-btn" id = "more-options">More Options</a>').appendTo('#fixed-menu');
     $('<li></li>').html('<a id = "close-options-sideNav">Close</a>').prependTo('#navbar-menu-side').attr({'style': 'display: block'});
     //////

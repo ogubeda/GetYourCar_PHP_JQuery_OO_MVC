@@ -16,12 +16,13 @@ switch ($_GET['op']) {
             if (!$check) {
                 $data = $querys -> saveCart($_POST['carPlate'], $_POST['days'], $_SESSION['user']);
             }// end_if
-        }// end_if
-        //////
-        if ($data['resolve']) {
-            echo json_encode('Done.');
+            if ($data['resolve']) {
+                echo json_encode('Done.');
+            }else {
+                echo $data['desc'];
+            }// end_else
         }else {
-            echo $data['desc'];
+            echo 'no-login';
         }// end_else
         break;
         //////

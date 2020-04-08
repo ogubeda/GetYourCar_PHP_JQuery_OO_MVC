@@ -14,7 +14,7 @@ switch ($_GET['op']) {
         break;
         //////
     case 'sendInfo';
-        $selShop = $querys -> selectMultiple('SELECT carPlate, brand, model, image FROM allCars ORDER BY views DESC LIMIT ' . $_POST['totalItems'] . ', ' . $_POST['itemsPage']);
+        $selShop = $querys -> selectMultiple('SELECT carPlate, brand, model, image, price FROM allCars ORDER BY views DESC LIMIT ' . $_POST['totalItems'] . ', ' . $_POST['itemsPage']);
         if (!empty($selShop)) {
             echo json_encode($selShop);
         }else {
@@ -53,7 +53,7 @@ switch ($_GET['op']) {
     case 'filter';
         $selCarFilter = $querys -> mountQuery(json_decode($_GET['filters'], true));
         //////
-        $selMulti = $querys -> selectMultiple('SELECT carPlate, brand, model, image FROM allCars' . $selCarFilter . ' ORDER BY views DESC LIMIT ' . $_POST['totalItems'] . ', ' . $_POST['itemsPage']);
+        $selMulti = $querys -> selectMultiple('SELECT carPlate, brand, model, image, price FROM allCars' . $selCarFilter . ' ORDER BY views DESC LIMIT ' . $_POST['totalItems'] . ', ' . $_POST['itemsPage']);
         if (!empty($selMulti)) {
             echo json_encode($selMulti);
         }else {

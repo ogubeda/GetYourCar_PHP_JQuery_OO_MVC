@@ -99,7 +99,7 @@ function printDataCart(cart, localCart = null) {
         price = parseFloat(cart[row].price) * (1 + (days / 10 - 0.1));
         totalPrice = totalPrice + price;
         //////
-        $('<div></div>').attr({'id': cart[row].carPlate, 'class': 'product-element'}).appendTo('#container-details-cart');
+        $('<div></div>').attr({'id': cart[row].carPlate, 'class': 'product-element', 'style': 'margin-top: 25px'}).appendTo('#container-details-cart');
         $('<span></span>').attr({'id': 'info-cont'}).html(cart[row].brand + ' ' + cart[row].model).appendTo('#' + cart[row].carPlate);
         $('<span></span>').attr({'id': 'select-days' + cart[row].carPlate}).html('Days ').appendTo('#' + cart[row].carPlate);
         $('<select></select>').attr({'class': 'select-drop-days', 'name': 'quantity-days', 'autocomplete': 'off', 'id': 'select-daysI-' + cart[row].carPlate}).appendTo('#select-days' + cart[row].carPlate);
@@ -116,7 +116,7 @@ function printDataCart(cart, localCart = null) {
         $('<span></span>').attr({'id': 'info-price'}).html(price + '€').appendTo('#' + cart[row].carPlate);
     }
     $('<span></span>').attr({'id': 'i'}).html(totalPrice + '€').appendTo('#price-cart-calc');
-    $('<a></a>').attr({'id': 'checkout-btn'}).html('Check out').appendTo('#container-price-cart');
+    $('<a></a>').attr({'id': 'checkout-btn', 'class': 'default-button'}).html('Check out').appendTo('#container-price-cart');
 }// end_printDataCart
 //////
 

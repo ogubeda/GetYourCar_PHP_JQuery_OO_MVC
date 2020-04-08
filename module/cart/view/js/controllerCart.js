@@ -35,8 +35,11 @@ function cartSys(carPlate) {
     .then(function() {
         console.log('Saved.');
     }).catch(function(error) {
-        console.log(error);
-        insertCart(carPlate);
+        if (error === 'no-login') {
+            insertCart(carPlate);
+        }else {
+            console.log(error);
+        }// end_else
     });
 }// end_cartSys
 //////

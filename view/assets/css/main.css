@@ -1417,3 +1417,8 @@ footer {
 #main-shop {
   height: 1000px;
 }
+#container-btns {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
