@@ -77,7 +77,7 @@ switch ($_GET['op']) {
             if ($data['resolve']) {
                 echo json_encode($data);
             }else {
-                echo 'error';
+                echo $data;
             }// end_else
         }else {
             echo json_encode(false);
@@ -96,6 +96,19 @@ switch ($_GET['op']) {
             echo json_encode('false');
         }// end_else
         break;
+    case 'addDiscCode';
+        if (isset($_SESSION['user'])) {
+            $data = $querys -> addDiscCode($_SESSION['user'], $_POST['code']);
+            if ($data['resolve']) {
+                echo json_encode('Done.');
+            }else {
+                echo $data['desc'];
+            }// end_else
+        }else {
+            echo 'no-login';
+        }// end_else    
+        break;
+        //////
     default;
         include ('view/inc/error404.html');
         break;

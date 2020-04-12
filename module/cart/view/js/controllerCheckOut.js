@@ -23,10 +23,32 @@ function addCartEvents() {
             getDataCart();
         }).catch(function(error) {
             console.log(error);
-        });
-        
-    });
+        });//
+    });//
+    //////
+    $(document).on('click', '#code-disc-btn', function() {
+        if ($('#code-disc-input').val().length > 0) {
+            addDiscCode($('#code-disc-input').val());
+        }else {
+            console.log('Empty.');
+        }// end_else
+    });//
 }// end_addCartEvents
+//////
+
+function addDiscCode(discCode) {
+    //////
+    ajaxPromise('module/cart/controller/controllerCart.php?op=addDiscCode', 'POST', 'JSON', {code: discCode})
+    .then(function() {
+        getDataCart();
+    }).catch(function(error) {
+        console.log(error);
+        if (error === 'no-login') {
+            localStorage.setItem('purchase', true);
+            window.location.href = 'index.php?page=log-in&op=list';
+        }// end_if
+    });
+}// end_addDiscCode
 //////
 
 function checkOutCart() {
@@ -36,7 +58,14 @@ function checkOutCart() {
         if (data === "false") {
             localStorage.setItem('purchase', true);
             window.location.href = 'index.php?page=log-in&op=list';
-        }// end_if
+        }else {
+            $('#container-details-cart').empty();
+            $('#price-cart-calc').empty();
+            $('#header-price-cart').empty();
+            $('#checkout-btn').remove();
+            //////
+            $('<h1></h1>').html('Succesfull purchase').appendTo('#container-details-cart');
+        }// end_else
     }).catch(function(error){
         console.log(error);
     });
@@ -87,19 +116,25 @@ function getDataCart() {
 
 function printDataCart(cart, localCart = null) {
     //////
-    let totalPrice = 0;
-    let price = 0;
-    let days = 0;
+    console.log(cart);
+    let totalPrice = 0, price = 0, days = 0, disc = 0;
+    let code = "";
     $('#container-details-cart').empty();
     $('#price-cart-calc').empty();
     $('#checkout-btn').remove();
     //////
+    $('<h1></h1>').html('Products').appendTo('#container-details-cart');
+    $('<div></div>').attr({'id': 'container-disc-code', 'style': 'float: right'}).html('Discount Code').appendTo('#container-details-cart');
+    $('<input></input>').attr({'type': 'text', 'style': 'display:block', 'id': 'code-disc-input'}).appendTo('#container-disc-code');
+    $('<a></a>').html('Apply').attr({'class': 'default-button', 'id': 'code-disc-btn'}).appendTo('#container-disc-code');
     for (row in cart) {
+        code = cart[row].code_name;
+        disc = parseInt(cart[row].discount) || 0;
         days = parseFloat(cart[row].days) || parseFloat(localCart[row].days) || 1;
         price = parseFloat(cart[row].price) * (1 + (days / 10 - 0.1));
         totalPrice = totalPrice + price;
         //////
-        $('<div></div>').attr({'id': cart[row].carPlate, 'class': 'product-element', 'style': 'margin-top: 25px'}).appendTo('#container-details-cart');
+        $('<div></div>').attr({'id': cart[row].carPlate, 'class': 'product-element', 'style': 'margin-top: 25px; width: 75%'}).appendTo('#container-details-cart');
         $('<span></span>').attr({'id': 'info-cont'}).html(cart[row].brand + ' ' + cart[row].model).appendTo('#' + cart[row].carPlate);
         $('<span></span>').attr({'id': 'select-days' + cart[row].carPlate}).html('Days ').appendTo('#' + cart[row].carPlate);
         $('<select></select>').attr({'class': 'select-drop-days', 'name': 'quantity-days', 'autocomplete': 'off', 'id': 'select-daysI-' + cart[row].carPlate}).appendTo('#select-days' + cart[row].carPlate);
@@ -114,7 +149,13 @@ function printDataCart(cart, localCart = null) {
         }// end_for
         $('<a></a>').attr({'style': 'margin-left: 15px', 'id': 'delete-btn'}).html('Delete').appendTo('#' + cart[row].carPlate)
         $('<span></span>').attr({'id': 'info-price'}).html(price + '€').appendTo('#' + cart[row].carPlate);
-    }
+    }// end_for
+    if (disc > 0) {
+        $('<div></div>').html(code).appendTo('#container-disc-code');
+        $('<span></span>').attr({'id': 'i', 'style': 'display: block'}).html(totalPrice + '€').appendTo('#price-cart-calc');
+        $('<span></span>').attr({'style': 'display: block'}).html('- ' + totalPrice * disc / 100 + '€').appendTo('#price-cart-calc');
+        totalPrice = totalPrice - (totalPrice * disc / 100);
+    }// end_if
     $('<span></span>').attr({'id': 'i'}).html(totalPrice + '€').appendTo('#price-cart-calc');
     $('<a></a>').attr({'id': 'checkout-btn', 'class': 'default-button'}).html('Check out').appendTo('#container-price-cart');
 }// end_printDataCart

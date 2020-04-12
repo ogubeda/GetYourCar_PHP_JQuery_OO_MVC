@@ -1309,9 +1309,10 @@ footer {
   background-position: center;
 }
 .default-button {
+  user-select: none;
 	text-decoration: none;
 	cursor: pointer;
-	background-color: #333333;
+	background-color: #2d2a2e;
 	border: none;
 	color:#FFFFFF;
 	text-align: center;
@@ -1320,11 +1321,14 @@ footer {
 	font-size: 15px;
 	padding: 10px 25px;
   margin: 2px 4px;
-  transition: all 0.3s cubic-bezier(0.84, 0.35, 0.39, 0.74) 0s;
-  border-radius: 5px;
+  transition: all 0.1s cubic-bezier(0.84, 0.35, 0.39, 0.74) 0s;
+  border-radius: 3px;
 }
 .default-button:hover {
-	background-color: #fc7820;
+	background-color: #343135;
+}
+.default-button:active {
+  background-color: #fc7820;
 }
 .conf-button {
 	text-decoration: none;
