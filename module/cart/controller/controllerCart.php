@@ -77,10 +77,10 @@ switch ($_GET['op']) {
             if ($data['resolve']) {
                 echo json_encode($data);
             }else {
-                echo $data;
+                echo $data['desc'];
             }// end_else
         }else {
-            echo json_encode(false);
+            echo json_encode('false');
         }// end_else
         break;
         //////
@@ -107,6 +107,19 @@ switch ($_GET['op']) {
         }else {
             echo 'no-login';
         }// end_else    
+        break;
+        //////
+    case 'removeDiscCode';
+        if (isset($_SESSION['user'])) {
+            $data = $querys -> removeDiscCode($_SESSION['user']);
+            if ($data['resolve']) {
+                echo json_encode('Done.');
+            }else {
+                echo 'error';
+            }// end_else
+        }else {
+            echo 'no-login';
+        }// end_else
         break;
         //////
     default;

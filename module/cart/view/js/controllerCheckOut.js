@@ -33,7 +33,23 @@ function addCartEvents() {
             console.log('Empty.');
         }// end_else
     });//
+    //////
+    $(document).on('click', '#remove-disc-code', function() {
+        removeDiscCode();
+    });
 }// end_addCartEvents
+//////
+
+function removeDiscCode() {
+    //////
+    ajaxPromise('module/cart/controller/controllerCart.php?op=removeDiscCode', 'POST', 'JSON')
+    .then(function(data) {
+        console.log(data);
+        getDataCart();
+    }).catch(function(error){
+        console.log(error);
+    });
+}// end_removeDiscCode
 //////
 
 function addDiscCode(discCode) {
@@ -116,7 +132,6 @@ function getDataCart() {
 
 function printDataCart(cart, localCart = null) {
     //////
-    console.log(cart);
     let totalPrice = 0, price = 0, days = 0, disc = 0;
     let code = "";
     $('#container-details-cart').empty();
@@ -151,7 +166,8 @@ function printDataCart(cart, localCart = null) {
         $('<span></span>').attr({'id': 'info-price'}).html(price + '€').appendTo('#' + cart[row].carPlate);
     }// end_for
     if (disc > 0) {
-        $('<div></div>').html(code).appendTo('#container-disc-code');
+        $('<div></div>').attr({'style': 'margin-top: 15px'}).html(code + '<span style = "float: right">' + disc + '%</span>').appendTo('#container-disc-code');
+        $('<a></a>').attr({'id': 'remove-disc-code', 'class': 'default-button'}).html('Remove Code').appendTo('#container-disc-code');
         $('<span></span>').attr({'id': 'i', 'style': 'display: block'}).html(totalPrice + '€').appendTo('#price-cart-calc');
         $('<span></span>').attr({'style': 'display: block'}).html('- ' + totalPrice * disc / 100 + '€').appendTo('#price-cart-calc');
         totalPrice = totalPrice - (totalPrice * disc / 100);

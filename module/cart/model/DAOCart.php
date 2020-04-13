@@ -27,13 +27,14 @@ class DAOCart {
         if ($disc > 0) {
             $total = $total - ($total * $disc / 100);
         }// end_if
+        echo $total;
         if ($total <= $valueMoney['resolve']['money']) {
             $values = DAOGeneral::booleanQuery($typedQuery);
             if ($values['resolve']) {
                 $credit = $valueMoney['resolve']['money'] - $total;
                 $downMoney = "UPDATE users SET money = $credit WHERE username = '$username'";
-                DAOGeneral::booleanQuery($downMoney);
-                DAOGeneral::booleanQuery($deleteCart);
+                $updateMoney = DAOGeneral::booleanQuery($downMoney);
+                $delete = DAOGeneral::booleanQuery($deleteCart);
             }// end_if
         }// end_if
         //////
@@ -43,7 +44,11 @@ class DAOCart {
 
     function saveCart($carPlate, $days, $username) {
         $typedQuery = "INSERT INTO carts VALUES ('$carPlate', '$username', $days, NULL)";
+        $removeDisc = "UPDATE carts SET code_name = NULL WHERE username = '$username'";
         $values = DAOGeneral::booleanQuery($typedQuery);
+        if ($values['resolve']) {
+            DAOGeneral::booleanQuery($removeDisc);
+        }// end_if
         //////
         return $values;
         //////
@@ -131,4 +136,13 @@ class DAOCart {
         //////
         return $values;
     }// end_DiscCode
+    //////
+
+    function removeDiscCode($username) {
+        //////
+        $typedQuery = "UPDATE carts SET code_name = NULL WHERE username = '$username'";
+        $value = DAOGeneral::booleanQuery($typedQuery);
+        //////
+        return $value;
+    }// end_removeDiscCode
 }// endDAOCart
