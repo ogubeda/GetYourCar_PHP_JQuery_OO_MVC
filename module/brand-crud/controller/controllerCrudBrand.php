@@ -10,10 +10,10 @@ switch ($_GET['op']) {
         break;
         //////
     case 'sendInfo';
-        $infoBrand = $querys -> selectMultiple('SELECT * FROM brandCars');
+        $infoBrand = $querys -> selectInfo();
         //////
-        if (!empty($infoBrand)) {
-            echo json_encode($infoBrand);
+        if (!empty($infoBrand -> getResolve())) {
+            echo json_encode($infoBrand -> getResolve());
         }else {
             echo 'error';
         }// end_else

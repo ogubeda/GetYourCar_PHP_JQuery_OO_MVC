@@ -27,7 +27,6 @@ class DAOCart {
         if ($disc > 0) {
             $total = $total - ($total * $disc / 100);
         }// end_if
-        echo $total;
         if ($total <= $valueMoney['resolve']['money']) {
             $values = DAOGeneral::booleanQuery($typedQuery);
             if ($values['resolve']) {

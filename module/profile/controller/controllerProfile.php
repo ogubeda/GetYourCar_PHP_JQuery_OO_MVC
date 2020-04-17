@@ -14,31 +14,31 @@ switch ($_GET['op']) {
     case 'sendData';
         $data = $querys -> selectUser($_SESSION['user']);
         ////
-        if (!empty($data['resolve'])) {
-            echo json_encode($data['resolve']);
+        if (!empty($data -> getResolve())) {
+            echo json_encode($data -> getResolve());
         }else {
-            echo $data['desc'];
+            echo $data -> getError();
         }// end_else
         break;
         //////
     case 'sendUserFavs';
         $data = $querys -> selectFavs($_SESSION['user']);
         //////
-        if (!empty($data['resolve'])) {
-            echo json_encode($data['resolve']);
+        if (!empty($data -> getResolve())) {
+            echo json_encode($data -> getResolve());
         }else {
-            echo $data['desc'];
+            echo $data -> getError();
         }// end_else
         break;
         //////
     case 'deleteProfile';
         $data = $querys -> deleteUser($_SESSION['user']);
         //////
-        if ($data['resolve']) {
+        if ($data -> getResult()) {
             session_destroy();
             echo json_encode('Done.');
         }else {
-            echo $data['desc'];
+            echo $data -> getError();
         }// end_else
         break;
         //////
