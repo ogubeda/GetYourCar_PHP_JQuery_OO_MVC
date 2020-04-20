@@ -11,6 +11,8 @@ class Querys {
     private $query;
     private $where;
     private $join;
+    private $order;
+    private $limit;
 
     public function select($values, $table) {
         for ($i = 0; $i < sizeof($values); $i++) {
@@ -20,6 +22,23 @@ class Querys {
         //////
         return $this;
     }// end_select
+
+    public function update($values, $table) {
+        $typedQuery = "UPDATE $table SET ";
+        $cont = 0;
+        //////
+        foreach ($values as $key => $row) {
+            if ($cont == 0) {
+                $typedQuery = $typedQuery . $key . " = " . $row;
+            }else {
+                $typedQuery = $typedQuery . ", $key  = " . $row;
+            }// end_else
+            $cont++;
+        }// end_foreach
+        $this -> query = $typedQuery;
+        //////
+        return $this;
+    }// end_update
 
     public function delete($table) {
         $this -> query = "DELETE FROM $table";
@@ -71,11 +90,33 @@ class Querys {
         return $this;
     }// end_join
 
+    public function order($values, $type = "ASC") {
+        $this -> order = " ORDER BY " . implode(', ', $values) . " $type";
+        //////
+        return $this;
+    }// end_order
+
+    public function limit($maxItems, $totalItems = false) {
+        $limit = " LIMIT ";
+        if ($totalItems == false) {
+            $limit = $limit . "$maxItems";
+        }else {
+            $limit = $limit . "$maxItems, $totalItems";
+        }// end_else
+        //////
+        $this -> limit = $limit;
+        return $this;
+    }// end_limit
+
     public function manual($typedQuery) {
-        $this -> query = $typedQuery;
+        $this -> query = $this -> query . $typedQuery;
         //////
         return $this;
     }// end_manual
+
+    public function count() {
+        $this -> resolve = mysqli_num_rows($this -> query);
+    }// end_count
 
     public function execute() {
         if (!empty($this -> join)) {
@@ -83,6 +124,12 @@ class Querys {
         }
         if (!empty($this -> where)) {
             $this -> query = $this -> query . $this -> where;
+        }
+        if (!empty($this -> order)) {
+            $this -> query = $this -> query . $this -> order;
+        }
+        if (!empty($this -> limit)) {
+            $this -> query = $this -> query . $this -> limit;
         }
         $connection = DB::enable();
         $this -> result = mysqli_query($connection, $this -> query);
@@ -92,15 +139,15 @@ class Querys {
         return $this;
     }// end_execute
 
-    public function queryToArray() {
+    public function queryToArray($force = false) {
         $values = array();
         //////
         if (mysqli_num_rows($this -> result) > 0) {
             while ($row = mysqli_fetch_assoc($this -> result)) {
-                if (mysqli_num_rows($this -> result) == 1) {
-                    $values = $row;
-                }else {
+                if ((mysqli_num_rows($this -> result) > 1) || ($force == true)) {
                     $values[] = $row;
+                }else {
+                    $values = $row;
                 }// end_else
             }// end_while
         }// end_if

@@ -159,6 +159,7 @@ function redirectShop() {
             type: 'POST',
             data: {brand: brand}
         }).done(function(data) {
+            console.log(data);
             if (data == 1) {
                 var filter = {'brand': [brand]};
                 localStorage.setItem('filters', JSON.stringify(filter));

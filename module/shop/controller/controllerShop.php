@@ -8,27 +8,29 @@ include ($path . 'module/shop/model/DAOFav.php');
 $querys = new QuerysShop();
 $querysFav = new QuerysFav();
 session_start();
+
 switch ($_GET['op']) {
     case 'list';
         include ('module/shop/view/list.html');
         break;
         //////
     case 'sendInfo';
-        $selShop = $querys -> selectMultiple('SELECT carPlate, brand, model, image, price FROM allCars ORDER BY views DESC LIMIT ' . $_POST['totalItems'] . ', ' . $_POST['itemsPage']);
-        if (!empty($selShop)) {
-            echo json_encode($selShop);
+        $selShop = $querys -> selectShop($_POST['totalItems'], $_POST['itemsPage']);
+        //////
+        if (!empty($selShop -> getResolve())) {
+            echo json_encode($selShop -> getResolve());
         }else {
-            echo 'error';
+            echo $selShop -> getError();
         }// end_else
         break;
         //////
     case 'read';
-        $selReadShop = $querys -> selectSingle('SELECT * FROM allCars WHERE carPlate ="'  . $_GET['carPlate'] . '"');
+        $selReadShop = $querys -> selectDetails($_GET['carPlate']);
         //////
-        if (!empty($selReadShop)) {
-            echo json_encode($selReadShop);
+        if (!empty($selReadShop -> getResolve())) {
+            echo json_encode($selReadShop -> getResolve());
         }else {
-            echo "error";
+            echo $selReadShop -> getError();
         }// end_else
         break;
         //////
@@ -51,13 +53,12 @@ switch ($_GET['op']) {
         break;
         //////
     case 'filter';
-        $selCarFilter = $querys -> mountQuery(json_decode($_GET['filters'], true));
+        $selCarFilter = $querys -> filterShop(json_decode($_GET['filters'], true), $_POST['totalItems'], $_POST['itemsPage']);
         //////
-        $selMulti = $querys -> selectMultiple('SELECT carPlate, brand, model, image, price FROM allCars' . $selCarFilter . ' ORDER BY views DESC LIMIT ' . $_POST['totalItems'] . ', ' . $_POST['itemsPage']);
-        if (!empty($selMulti)) {
-            echo json_encode($selMulti);
+        if (!empty($selCarFilter -> getResolve())) {
+            echo json_encode($selCarFilter -> getResolve());
         }else {
-            echo "error";
+            echo $selCarFilter -> getError();
         }// end_else
         break;
         //////

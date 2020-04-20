@@ -43,9 +43,10 @@ function loadShop(modal = false, itemsPage = 12, totalItems = 0) {
         detectFav();// inside view/js/favorites.js
         addToCart();// inside view/js/controllerCart.js
         paintCart();
-    }).catch(function() {
+    }).catch(function(error) {
+        console.log(error);
         localStorage.removeItem('filters');
-        location.reload();
+        // location.reload();
     });// end_catch
 }// end_loadShop
 //////

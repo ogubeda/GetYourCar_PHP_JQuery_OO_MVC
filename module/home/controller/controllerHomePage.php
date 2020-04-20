@@ -10,25 +10,25 @@ switch ($_GET['op']) {
         include ('module/home/view/homepage.html');
         break;
     case 'homePageSlide';
-        $selSlide = $homeQuery -> selectMultiple("SELECT carPlate, brand, model, image FROM allCars ORDER BY cv DESC LIMIT 5");
-        if (!empty($selSlide)) {
-            echo json_encode($selSlide);
+        $selSlide = $homeQuery -> selectSlide();
+        if (!empty($selSlide -> getResolve())) {
+            echo json_encode($selSlide -> getResolve());
         }else {
-            echo "error";
+            echo $selSlide -> getError();
         }// end_else
         break;
     case 'homePageCat';
-        $selCatBrand = $homeQuery -> selectMultiple("SELECT * FROM brandCars ORDER BY views DESC LIMIT " . $_POST['loaded'] . ", " . $_POST['items']);
-        if (!empty($selCatBrand)) {
-            echo json_encode($selCatBrand);
+        $selCatBrand = $homeQuery -> selectBrands($_POST['loaded'], $_POST['items']);
+        if (!empty($selCatBrand -> getResolve())) {
+            echo json_encode($selCatBrand -> getResolve());
         }else{
-            echo "error";
+            echo $selCatBrand -> getError();
         }// end_else
         break;
     case 'incrementView';
-        $viewUp = $homeQuery -> selectBoolean('UPDATE brandCars SET views = views + 1 WHERE brand ="' . $_POST['brand'] . '"');
+        $viewUp = $homeQuery -> incView($_POST['brand']);
         //////
-        echo $viewUp;
+        echo $viewUp -> getResult();
         break;
         //////
     default;

@@ -1,7 +1,6 @@
 <?php
 //////
 $path = $_SERVER['DOCUMENT_ROOT'] . '/frameworkCars.v.1.2/';
-include ($path . 'model/DAOGeneral.php');
 include ($path . 'model/DB.php');
 //////
 class DAOProfile {

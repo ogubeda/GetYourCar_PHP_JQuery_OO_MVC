@@ -3,6 +3,8 @@
 $path = $_SERVER['DOCUMENT_ROOT'] . '/frameworkCars.v.1.2/';
 //////
 include ($path . 'model/DAOGeneral.php');
+include ($path . 'model/DB.php');
+//////
 class QuerysShop {
     //////
     function selectBoolean($select) {
@@ -63,6 +65,18 @@ class QuerysShop {
         return $returnArrBrands;
     }// end_selectFilter
     //////
+
+    function selectShop($totalItems, $itemsPage) {
+        return DB::query() -> select(['carPlate', 'brand', 'model', 'image', 'price'], 'allCars') -> order(['views'], 'DESC') -> limit($itemsPage, $totalItems) -> execute() -> queryToArray(true);
+    }// end_selectShop
+
+    function filterShop($filters, $totalItems, $itemsPage) {
+        return DB::query() -> select(['carPlate', 'brand', 'model', 'image', 'price'], 'allCars') -> where($filters) -> limit($itemsPage, $totalItems) -> execute() -> queryToArray(true);
+    }// end_filterShop
+
+    function selectDetails($carPlate) {
+        return DB::query() -> select(['*'], 'allCars') -> where(['carPlate' => [$carPlate]]) -> execute() -> queryToArray();    
+    }// end_selectDetails
     
     function mountQuery($unmounted) {
         //////
