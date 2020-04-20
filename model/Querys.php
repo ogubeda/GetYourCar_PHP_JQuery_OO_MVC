@@ -14,11 +14,15 @@ class Querys {
     private $order;
     private $limit;
 
-    public function select($values, $table) {
+    public function select($values, $table, $distinct = false) {
+        $select = "SELECT";
+        if ($distinct == true) {
+            $select = " DISTINCT ";
+        }// end_if
         for ($i = 0; $i < sizeof($values); $i++) {
             $values[$i] = $table . "." . $values[$i];
         }// end_for
-        $this -> query = "SELECT " . implode(',', $values) . " FROM " . $table;
+        $this -> query = $select . implode(',', $values) . " FROM " . $table;
         //////
         return $this;
     }// end_select
