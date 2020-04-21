@@ -26,8 +26,9 @@ function loadSlider() {
                     '<i class="fa fa-angle-right"></i>'
                 ]
             });
-    }).fail(function() {
-        window.location.href = "index.php?page=error503";
+    }).fail(function(error) {
+        console.log(error);
+        // window.location.href = "index.php?page=error503";
     });
     //////
 }// end_loadSlider

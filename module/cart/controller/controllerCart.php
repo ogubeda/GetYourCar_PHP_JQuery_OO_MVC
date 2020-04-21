@@ -13,13 +13,13 @@ switch ($_GET['op']) {
     case 'storeCart';
         if (!empty($_POST['carPlate']) && isset($_SESSION['user'])) {
             $check = $querys -> checkCartVal($_POST['carPlate'], $_SESSION['user']);
-            if (!$check) {
+            if ($check -> getResolve() == 0) {
                 $data = $querys -> saveCart($_POST['carPlate'], $_POST['days'], $_SESSION['user']);
             }// end_if
-            if ($data['resolve']) {
+            if ($data -> getResult()) {
                 echo json_encode('Done.');
             }else {
-                echo $data['desc'];
+                echo $data -> getError();
             }// end_else
         }else {
             echo 'no-login';
@@ -29,20 +29,20 @@ switch ($_GET['op']) {
     case 'getCart';
         $data = $querys -> getCart($_POST['cart']);
         //////
-        if (!empty($data['resolve'])) {
-            echo json_encode($data['resolve']);
+        if (!empty($data -> getResolve())) {
+            echo json_encode($data -> getResolve());
         }else {
-            echo 'error';
+            echo $data -> getError();
         }// end_else
         break;
         //////
     case 'removeCart';
         if (isset($_SESSION['user'])) {
             $data = $querys -> removeCart($_POST['carPlate'], $_SESSION['user']);
-            if ($data['resolve']) {
+            if ($data -> getResult()) {
                 echo json_encode(true);
             }else {
-                echo $data['desc'];
+                echo $data -> getError();
             }// end_else
         }else {
             echo json_encode(false);
@@ -53,10 +53,10 @@ switch ($_GET['op']) {
         if (isset($_SESSION['user'])) {
             $data = $querys -> getCheckOutData($_SESSION['user']);
         }// end_if
-        if (!empty($data['resolve'])) {
-            echo json_encode($data['resolve']);
+        if (!empty($data -> getResolve())) {
+            echo json_encode($data -> getResolve());
         }else {
-            echo 'error';
+            echo $data -> getError();
         }// end_if
         break;
         //////
@@ -64,20 +64,20 @@ switch ($_GET['op']) {
         if (isset($_SESSION['user'])) {
             $data = $querys -> updateDays($_POST['days'], $_POST['carPlate'], $_SESSION['user']);
         }// end_if
-        if ($data['resolve']) {
+        if ($data -> getResult()) {
             echo json_encode('Done.');
         }else {
-            echo 'error';
+            echo $data -> getError();
         }
         break;
         //////
     case 'checkOut';
         if (isset($_SESSION['user'])) {
             $data = $querys -> addToPurchase($_SESSION['user']);
-            if ($data['resolve']) {
-                echo json_encode($data);
+            if ($data -> getResult()) {
+                echo json_encode($data -> getResult());
             }else {
-                echo $data['desc'];
+                echo $data -> getError();
             }// end_else
         }else {
             echo json_encode('false');
@@ -87,10 +87,10 @@ switch ($_GET['op']) {
     case 'selectCart';
         if (isset($_SESSION['user'])) {
             $data = $querys -> printCart($_SESSION['user']);
-            if (!empty($data['resolve'])) {
-                echo json_encode($data['resolve']);
+            if (!empty($data -> getResolve())) {
+                echo json_encode($data -> getResolve());
             }else {
-                echo 'error';
+                echo $data -> getError();
             }// end_else
         }else {
             echo json_encode('false');
@@ -99,10 +99,10 @@ switch ($_GET['op']) {
     case 'addDiscCode';
         if (isset($_SESSION['user'])) {
             $data = $querys -> addDiscCode($_SESSION['user'], $_POST['code']);
-            if ($data['resolve']) {
+            if ($data != false) {
                 echo json_encode('Done.');
             }else {
-                echo $data['desc'];
+                echo 'error';
             }// end_else
         }else {
             echo 'no-login';
@@ -112,7 +112,7 @@ switch ($_GET['op']) {
     case 'removeDiscCode';
         if (isset($_SESSION['user'])) {
             $data = $querys -> removeDiscCode($_SESSION['user']);
-            if ($data['resolve']) {
+            if ($data -> getResult()) {
                 echo json_encode('Done.');
             }else {
                 echo 'error';

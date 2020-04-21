@@ -3,11 +3,7 @@
 class QuerysFav {
     //////
     function checkCar($carPlate) {
-        //////
-        $select = "SELECT * FROM userFav WHERE username = '$_SESSION[user]' AND carPlate = '$carPlate'";
-        $query = DAOGeneral::singleQuery($select);
-        //////
-        if (mysqli_num_rows($query['query']) > 0) {
+        if (DB::query() -> select(['*'], 'userFav') -> where(['username' => [$_SESSION['username']], 'carPlate' => [$carPlate]]) -> execute() -> count() -> getResolve() > 0) {
             return true;
         }// end_if
         return false;
@@ -34,11 +30,6 @@ class QuerysFav {
     //////
 
     function selectFavs() {
-        //////
-        $typedQuery = "SELECT * FROM userFav WHERE username = '$_SESSION[user]'";
-        //////
-        $query = DAOGeneral::multipleQuery($typedQuery);
-        //////
-        return $query;
+        return DB::query() -> select(['*'], 'userFav') -> where(['username' => [$_SESSION['user']]]) -> execute() -> queryToArray(true);
     }// end_selectFavs
 }// end_QuerysFav

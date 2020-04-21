@@ -15,13 +15,15 @@ class Querys {
     private $limit;
 
     public function select($values, $table, $distinct = false) {
-        $select = "SELECT";
+        $select = "SELECT ";
         if ($distinct == true) {
-            $select = " DISTINCT ";
+            $select = "DISTINCT ";
         }// end_if
-        for ($i = 0; $i < sizeof($values); $i++) {
-            $values[$i] = $table . "." . $values[$i];
-        }// end_for
+        if ($values[0] != '*') {
+            for ($i = 0; $i < sizeof($values); $i++) {
+                $values[$i] = $table . "." . $values[$i];
+            }// end_for
+        }
         $this -> query = $select . implode(',', $values) . " FROM " . $table;
         //////
         return $this;
@@ -49,6 +51,21 @@ class Querys {
         //////
         return $this;
     }// end_delete
+
+    public function insert($values, $table) {
+        $insert = "INSERT INTO $table";
+        $cont = 0;
+        foreach ($values as $row) {
+            if ($cont == 0) {
+                $keys = array_keys($row);
+                $insert = $insert . " (" . implode(',', $keys) . ") VALUES";
+            }// end_cont
+            $insert = $insert . " ('" . implode("', '", array_values($row)) . "')";
+            $this -> query = $insert;
+            $cont++;
+        }// end_foreach
+        return $this;
+    }// insert
 
     public function where($values, $mode = 'AND', $operator = "=") {
         $cont = 0;
@@ -88,7 +105,7 @@ class Querys {
     public function join($values, $join) {
         foreach ($values as $row) {
             $keys = array_keys($row);
-            $this -> join = " $join JOIN $keys[0] ON $keys[0]" . "." . $row[$keys[0]] . " = $keys[1]" . "." . $row[$keys[1]];
+            $this -> join = $this -> join . " $join JOIN $keys[0] ON $keys[0]" . "." . $row[$keys[0]] . " = $keys[1]" . "." . $row[$keys[1]];
         }// end_foreach
         //////
         return $this;
@@ -119,7 +136,9 @@ class Querys {
     }// end_manual
 
     public function count() {
-        $this -> resolve = mysqli_num_rows($this -> query);
+        $this -> resolve = mysqli_num_rows($this -> result);
+        //////
+        return $this;
     }// end_count
 
     public function execute() {

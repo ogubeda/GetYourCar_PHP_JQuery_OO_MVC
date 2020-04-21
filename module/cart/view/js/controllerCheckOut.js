@@ -71,6 +71,7 @@ function checkOutCart() {
     //////
     ajaxPromise('module/cart/controller/controllerCart.php?op=checkOut', 'POST', 'JSON')
     .then(function(data) {
+        console.log(data);
         if (data === "false") {
             localStorage.setItem('purchase', true);
             window.location.href = 'index.php?page=log-in&op=list';
@@ -117,8 +118,10 @@ function getDataCart() {
         }else {
             getCart()
             .then(function(data) {
+                console.log(data);
                 printDataCart(data, JSON.parse(localStorage.getItem('cart')));
-            }).catch(function() {
+            }).catch(function(error) {
+                console.log(error);
                 $('#container-details-cart').empty();
                 $('#price-cart-calc').empty();
                 $('#container-price-cart').empty();

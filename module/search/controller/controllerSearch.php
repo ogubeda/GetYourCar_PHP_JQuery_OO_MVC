@@ -9,10 +9,10 @@ switch ($_GET['op']) {
     case 'listProvinces';
         $selProvinces = $searchQuerys -> multiple('SELECT DISTINCT province FROM concessionaire ORDER BY province');
         //////
-        if (!empty($selProvinces)) {
-            echo json_encode($selProvinces);
+        if (!empty($selProvinces -> getResolve())) {
+            echo json_encode($selProvinces -> getResolve());
         }else {
-            echo 'error';
+            echo $selProvinces -> getError();
         }// end_else
         break;
         //////
@@ -26,10 +26,10 @@ switch ($_GET['op']) {
         }// end_else
         $selCon = $searchQuerys -> multiple($select);
         //////
-        if (!empty($selCon)) {
-            echo json_encode($selCon);
+        if (!empty($selCon -> getResolve())) {
+            echo json_encode($selCon -> getResolve());
         }else {
-            echo 'error';
+            echo $selCon -> getError();
         }// end_else
         break;
         //////
@@ -44,10 +44,10 @@ switch ($_GET['op']) {
         }// end_else
         $selAutoComplete = $searchQuerys -> multiple($select);
         //////
-        if (!empty($selAutoComplete)) {
-            echo json_encode($selAutoComplete);
+        if (!empty($selAutoComplete -> getResolve())) {
+            echo json_encode($selAutoComplete -> getResolve());
         }else {
-            echo 'error';
+            echo $selAutoComplete -> getError();
         }// end_else
         break;
         //////

@@ -15,13 +15,14 @@ switch ($_GET['op']) {
     case 'register';
         $check = $querys -> checkKeys($_POST['username'], $_POST['email']);
         //////
-        if (!$check) {
-            $registerQuery = $querys -> booleanQuery($_POST['username'], $_POST['email'], $_POST['password']);
+        if ($check -> getResolve() <= 0) {
+            $registerQuery = $querys -> register($_POST['username'], $_POST['email'], $_POST['password']);
             //////
-            if (!$registerQuery['error']) {
+            $registerQuery -> getQuery();
+            if ($registerQuery -> getResult()) {
                 echo json_encode('done');
             }else {
-                echo $registerQuery['desc'];
+                echo $registerQuery -> getError();
             }// end_if
         }else { 
             echo 'Duplicated';
@@ -29,9 +30,9 @@ switch ($_GET['op']) {
         break;
         //////
     case 'logIn';
-        $getUserData = $querys -> singleQuery("SELECT * FROM users WHERE username = '$_POST[username]'");
-        if (!empty($getUserData)) {
-            loadSession($getUserData['username'], $getUserData['type'], $getUserData['avatar']);
+        $getUserData = $querys -> logIn($_POST['username']);
+        if (!empty($getUserData -> getResolve())) {
+            loadSession($getUserData -> getResolve()['username'], $getUserData -> getResolve()['type'], $getUserData -> getResolve()['avatar']);
             echo json_encode(md5(session_id()));
         }else {
             echo "error";

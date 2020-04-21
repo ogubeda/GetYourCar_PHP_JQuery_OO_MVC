@@ -14,11 +14,10 @@ switch ($_GET['op']) {
         break;
     case 'userOrder';
         $userOrderSel = $rdyQuery -> selectUserOrder();
-        if (!empty($userOrderSel)) {
-            echo json_encode($userOrderSel);
-            exit;
+        if (!empty($userOrderSel -> getResolve())) {
+            echo json_encode($userOrderSel -> getResolve());
         }else {
-            echo "error";
+            echo $userOrderSel -> getError();
         }// end_else
         break;
     default;
